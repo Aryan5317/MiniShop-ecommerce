@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { FiArrowRight } from "react-icons/fi"
-import { Phone, Bags, Watches, Clothes, Earphones, Kitchen, Shoes } from "../context/categoryImage.js"
+import { Phone, Bags, Watches, Clothes, Earphones, Kitchen, Shoes } from "../../context/categoryImage.js"
 function Category() {
     const scrollRef = useRef()
     const ScroolRight = () => {

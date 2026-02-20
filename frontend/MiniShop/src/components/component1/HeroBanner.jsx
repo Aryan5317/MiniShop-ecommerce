@@ -1,6 +1,6 @@
 import { FaLessThan, FaGreaterThan } from "react-icons/fa";
 import { useState } from "react";
-import { Banner1, Banner2, Banner3, Banner4, Banner5 } from "../context/heroBanner.js"
+import { Banner1, Banner2, Banner3, Banner4, Banner5 } from "../../context/heroBanner.js"
 
 function HeroBanner() {
 

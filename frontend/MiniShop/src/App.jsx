@@ -1,21 +1,30 @@
 import './App.css'
-import Navbar from './components/Navbar'
-import HeroBanner from './components/HeroBanner'
-import Category from './components/Category'
-import TopButton from './components/TopButton'
-import Footer from './components/Footer'
-import PhoneOptions from './components/PhoneOptions'
+import LandingPage from './Pages/LandingPage'
+import LoginPage from './components/component2/LoginPage';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 function App() {
-
+  const routes = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <LandingPage />
+      )
+    },
+    {
+      path: "/login",
+      element: (
+        <LoginPage />
+      )
+    }
+  ],
+    {
+      future: {
+        v7_startTransition: true,
+      },
+    }
+  )
   return (
-    <>
-      <Navbar />
-      <HeroBanner />
-      <Category />
-      <PhoneOptions />
-      <TopButton />
-      <Footer />
-    </>
+    <RouterProvider router={routes} />
   )
 }
 
