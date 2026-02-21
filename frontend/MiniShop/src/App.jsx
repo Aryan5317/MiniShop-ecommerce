@@ -1,6 +1,8 @@
 import './App.css'
 import LandingPage from './Pages/LandingPage'
-import LoginPage from './components/component2/LoginPage';
+import LoginPage from './Pages/LoginPage';
+import RegisterPage from './Pages/RegisterPage';
+import ForgetPasswordPage from './Pages/ForgetPasswordPage';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 function App() {
   const routes = createBrowserRouter([
@@ -14,6 +16,18 @@ function App() {
       path: "/login",
       element: (
         <LoginPage />
+      )
+    },
+    {
+      path: "/register",
+      element: (
+        <RegisterPage />
+      )
+    },
+    {
+      path: "/forget-password",
+      element: (
+        <ForgetPasswordPage />
       )
     }
   ],

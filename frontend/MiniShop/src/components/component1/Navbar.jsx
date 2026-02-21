@@ -13,7 +13,7 @@ function Navbar() {
                 <div className="flex md:hidden flex-row text-md font-semibold">
                     <div className="flex justify-center items-center">
                         <h3 className="text-sky-600"><FaUser /></h3>
-                        <Link to="#" className="p-1 rounded-md px-2 text-black">Login</Link>
+                        <Link to="/login" className="p-1 rounded-md px-2 text-black">Login</Link>
                     </div>
                     <div className="border-gray-300 border"></div>
                     <div className="flex justify-center items-center pr-2">
@@ -32,7 +32,7 @@ function Navbar() {
             <div className="flex hidden md:flex gap-3 font-semibold mr-7">
                 <div className="flex justify-center items-center">
                     <h3 className="text-sky-600"><FaUser /></h3>
-                    <Link to="#" className="p-1 px-3 rounded-md text-gray-600 text-xl">Sign In/Sign Up</Link>
+                    <Link to="/login" className="p-1 px-3 rounded-md text-gray-600 text-xl">Sign In/Sign Up</Link>
                 </div>
                 <div className="text-2xl flex justify-center items-center">
                     <h2 className="text-sky-600 px-2"><FiShoppingCart /></h2>
