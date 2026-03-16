@@ -1,0 +1,7 @@
+export {default as MobilePage} from "./MobilePhonesPage"
+export {default as BagsPage} from "./BagesPage"
+export {default as ClothesPage} from "./ClothesPage"
+export {default as EarphonesPage} from "./EarPhonesPage"
+export {default as KitchenPage} from "./KitchenPage"
+export {default as ShoesPage} from "./ShoesPage"
+export {default as WatchPage} from "./WatchePage"

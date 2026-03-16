@@ -1,6 +1,7 @@
 import { useRef } from "react"
 import { FiArrowRight } from "react-icons/fi"
-import { Phone, Bags, Watches, Clothes, Earphones, Kitchen, Shoes } from "../../context/categoryImage.js"
+import { Phone, Bags, Watches, Clothes, Earphones, Kitchen, Shoes } from "../../context/handlingImages/categoryImage.js"
+import { Link } from "react-router-dom"
 function Category() {
     const scrollRef = useRef()
     const ScroolRight = () => {
@@ -11,14 +12,15 @@ function Category() {
             })
         }
     }
+
     const categoryDetails = [
-        { image: Phone, name: "Mobile" },
-        { image: Bags, name: "Bags" },
-        { image: Watches, name: "Watches" },
-        { image: Clothes, name: "Clothes" },
-        { image: Earphones, name: "Earphone" },
-        { image: Kitchen, name: "Kitchen" },
-        { image: Shoes, name: "Shoes" }
+        { image: Phone, name: "Mobile", id: "001", path: "/home/mobilePhones" },
+        { image: Bags, name: "Bags", id: "002", path: "/home/bagsPages" },
+        { image: Watches, name: "Watches", id: "003", path: "/home/watches" },
+        { image: Clothes, name: "Clothes", id: "004", path: "/home/clothes" },
+        { image: Earphones, name: "Earphone", id: "005", path: "/home/earphones" },
+        { image: Kitchen, name: "Kitchen", id: "006", path: "/home/kitchen" },
+        { image: Shoes, name: "Shoes", id: "007", path: "/home/shoes" }
     ]
 
     return (
@@ -43,9 +45,10 @@ function Category() {
             <div className="flex justify-center mt-1 rounded-2xl">
                 <div className="flex overflow-x-auto overflow-y-hidden md:gap-7 scroll-smooth" ref={scrollRef}>
                     {categoryDetails.map((items) => (
-                        <div
-                            key={items.name}
-                            className="flex flex-col items-center min-w-[100px] md:min-w-[180px] p-3 rounded-2xl cursor-pointer"
+                        <Link
+                            key={items.id}
+                            to={items.path}
+                            className="flex border flex-col items-center min-w-[120px] md:min-w-[230px] p-3 rounded-2xl cursor-pointer"
                         >
                             <img
                                 src={items.image}
@@ -53,10 +56,10 @@ function Category() {
                                 className="md:h-40 md:w-40 lg:h-44 lg:w-44 h-20 w-20 rounded-full border-2 border-sky-600 
                      shadow-md hover:shadow-lg transition duration-300 object-cover"
                             />
-                            <button className="mt-3 text-lg md:text-xl font-semibold text-sky-600">
+                            <div className="mt-3 text-lg md:text-xl font-semibold text-sky-600 cursor-pointer">
                                 {items.name}
-                            </button>
-                        </div>
+                            </div>
+                        </Link>
                     ))}
                 </div>
             </div>

@@ -1,5 +1,4 @@
 async function registerService(userDetails) {
-    console.log("UserDetails is: ", userDetails)
     const dataToSend = {
         username: userDetails.username,
         email: userDetails.email,
@@ -18,9 +17,15 @@ async function registerService(userDetails) {
         });
         const data = await response.json()
         console.log("Data from backend: ", data)
+        if (!response.ok) {
+            console.log("Registeration failed: ", data.message || data)
+            throw new Error(data.message || "Registration failed");
+        }
+        return data.message;
     }
-    catch(err){
+    catch (err) {
         console.log("Error while register user: ", err)
+        throw err 
     }
 }
 

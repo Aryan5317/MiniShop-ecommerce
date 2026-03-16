@@ -4,6 +4,7 @@ import Category from "../components/component1/Category";
 import TopButton from "../components/component1/TopButton";
 import PhoneOptions from "../components/component1/PhoneOptions";
 import Footer from "../components/component1/Footer";
+import MobilePhoneDeals from "../components/component1/mobilePhoneDeals";
 
 function LandingPage() {
     return (
@@ -11,6 +12,7 @@ function LandingPage() {
             <Navbar/>
             <HeroBanner/>
             <Category/>
+            <MobilePhoneDeals/>
             <PhoneOptions/>
             <TopButton/>
             <Footer/>
