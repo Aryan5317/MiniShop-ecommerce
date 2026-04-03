@@ -11,8 +11,8 @@ connectDB()
             res.send("API is running...");
         });
 
-        app.listen(process.env.port || 9000, () => {
-            console.log(`Server is running at port ${process.env.port}`)
+        app.listen(process.env.PORT || 10000, () => {
+            console.log(`Server is running at port ${process.env.PORT}`)
         })
     })
     .catch((err) => {
