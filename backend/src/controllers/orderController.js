@@ -72,8 +72,8 @@ const orderCompletion = asyncHandler(async (req, res, next) => {
     if (!productFields) {
         throw new ApiError(400, `No field mapping found for category: ${category}`);
     }
-    findProduct.totalSell = findProduct.totalSell + quantity;
-    findProduct.stock = findProduct.stock - quantity;
+    findProduct.totalSell = findProduct.totalSell + Number(quantity);
+    findProduct.stock = findProduct.stock - Number(quantity);
     await findProduct.save();
 
     const getProductDetails = await ProductModel.findById(productId)
