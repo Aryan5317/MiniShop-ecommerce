@@ -129,7 +129,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     const options = {
         httpOnly: true, // it makes only accessible by server not by client(browser)
         secure: true, // for localhost always false and after deploy use true here
-        sameSite: "Lax",
+        sameSite: "none",
         path: "/"
     }
     return res.status(200)
@@ -200,7 +200,8 @@ MiniShop Team`
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        sameSite: "none"
     }
 
     const verifiedEmailUser = await User.findById(userId)
@@ -318,7 +319,8 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
 
         const options = {
             httpOnly: true,
-            secure: true
+            secure: true,
+            sameSite: "none"
         }
 
         return res.status(200)
@@ -427,7 +429,8 @@ const logoutUser = asyncHandler(async (req, res, next) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        sameSite: "none"
     }
     return res.status(200)
         .clearCookie("accessToken", options)
