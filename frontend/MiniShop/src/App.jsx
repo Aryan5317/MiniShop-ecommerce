@@ -6,7 +6,7 @@ import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import ForgetPasswordPage from './Pages/ForgetPasswordPage';
 import HomePage from './Pages/HomePage';
-import ResetPasswordPage from '../Pages/ResetPasswordPage';
+import ResetPasswordPage from "./Pages/ResetPasswordPage"
 import SelectedMobilePage from './Pages/selectedItemPage/SelectedMobilePage';
 import CheckOutPage from './Pages/selectedItemPage/CheckOutPage';
 import PaymentGateway from './Pages/selectedItemPage/PaymentGateway';
