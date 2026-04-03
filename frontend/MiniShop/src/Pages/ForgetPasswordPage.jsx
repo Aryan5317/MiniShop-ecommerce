@@ -1,4 +1,3 @@
-import { LoginBrowserImage1, LoginMobileImage } from "../context/handlingImages/loginImage.js"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FiMail, FiLock } from "react-icons/fi"
@@ -94,7 +93,7 @@ function ForgetPasswordPage() {
     <div>
       <div className="hidden sm:flex relative w-full h-screen items-center justify-center overflow-hidden">
         <img
-          src={LoginBrowserImage1}
+          src="https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116708/LoginBrowserImage1_nt0lro.png"
           alt="Login Background"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -161,7 +160,7 @@ function ForgetPasswordPage() {
       </div>
       <div className="md:hidden relative flex justify-center items-center w-screen h-screen overflow-hidden">
         <img
-          src={LoginMobileImage}
+          src="https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116709/LoginMobileImage_zcff3s.png"
           alt="Login Background"
           className="absolute inset-0 w-full h-full object-cover"
         />

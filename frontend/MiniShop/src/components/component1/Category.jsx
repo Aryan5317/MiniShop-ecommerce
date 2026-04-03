@@ -1,6 +1,5 @@
 import { useRef } from "react"
 import { FiArrowRight } from "react-icons/fi"
-import { Phone, Bags, Watches, Clothes, Earphones, Kitchen, Shoes } from "../../context/handlingImages/categoryImage.js"
 import { Link } from "react-router-dom"
 function Category() {
     const scrollRef = useRef()
@@ -14,13 +13,13 @@ function Category() {
     }
 
     const categoryDetails = [
-        { image: Phone, name: "Mobile", id: "001", path: "/home/mobilePhones" },
-        { image: Bags, name: "Bags", id: "002", path: "/home/bagsPages" },
-        { image: Watches, name: "Watches", id: "003", path: "/home/watches" },
-        { image: Clothes, name: "Clothes", id: "004", path: "/home/clothes" },
-        { image: Earphones, name: "Earphone", id: "005", path: "/home/earphones" },
-        { image: Kitchen, name: "Kitchen", id: "006", path: "/home/kitchen" },
-        { image: Shoes, name: "Shoes", id: "007", path: "/home/shoes" }
+        { image: "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116484/Phone_mzn4an.png", name: "Mobile", id: "001", path: "/home/mobilePhones" },
+        { image: "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116481/Bags_toyegz.png", name: "Bags", id: "002", path: "/home/bagsPages" },
+        { image: "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116486/Watches_fg6vfp.png", name: "Watches", id: "003", path: "/home/watches" },
+        { image: "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116484/Clothes_bscmom.png", name: "Clothes", id: "004", path: "/home/clothes" },
+        { image: "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116483/Earphones_ui0pzl.png", name: "Earphone", id: "005", path: "/home/earphones" },
+        // { image: Kitchen, name: "Kitchen", id: "006", path: "/home/kitchen" },
+        { image: "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116485/Shoes_ejsrjf.png", name: "Shoes", id: "007", path: "/home/shoes" }
     ]
 
     return (

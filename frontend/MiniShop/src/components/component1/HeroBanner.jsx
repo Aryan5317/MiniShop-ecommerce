@@ -1,10 +1,9 @@
 import { FaLessThan, FaGreaterThan } from "react-icons/fa";
 import { useState } from "react";
-import { Banner1, Banner2, Banner3, Banner4, Banner5 } from "../../context/handlingImages/heroBanner.js"
 
 function HeroBanner() {
 
-    const HeroBanner = [Banner1, Banner2, Banner3, Banner4, Banner5]
+    const HeroBanner = ["https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775122615/Screenshot_2026-04-02_150622_fwtq5t.png", "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775123459/Gemini_Generated_Image_6wl89n6wl89n6wl8_sjndrw.png", "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775123603/Banner2_idmfgz.png", "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775123606/Banner4_nk05yp.png", "https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775123614/Banner5_kmqi8k.png"]
     const [bannerIndex, setBannerIndex] = useState(0);
 
     const SetLessThan = () => {
@@ -23,10 +22,10 @@ function HeroBanner() {
     return (
         <div className="relative w-full overflow-hidden">
             <div className="w-full 
-                h-[180px] 
-                sm:h-[250px] 
-                md:h-[300px] 
-                lg:h-[400px] 
+                h-[220px] 
+                sm:h-[350px] 
+                md:h-[380px] 
+                lg:h-[450px] 
                 overflow-hidden">
 
                 <img

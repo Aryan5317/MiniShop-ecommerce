@@ -1,6 +1,8 @@
 import { Phones } from "../models/phoneModal.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
+import { Orders } from "../models/userOrderModal.js"
+import { Cart } from "../models/cartModal.js";
 import ApiError from "../utils/errorHandler.js";
 
 const getMobileDetails = asyncHandler(async (req, res, next) => {
@@ -16,9 +18,10 @@ const getMobileDetails = asyncHandler(async (req, res, next) => {
     return res.status(200)
         .json(new ApiResponse(
             200, {
-                phoneData: fetchPhoneData
-            }, "User data fetched"
+            productData: fetchPhoneData
+        }, "User data fetched"
         ))
 })
 
-export {getMobileDetails}
+
+export { getMobileDetails }

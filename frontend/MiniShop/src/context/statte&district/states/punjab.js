@@ -1,0 +1,27 @@
+const Punjab = [
+    "Amritsar",
+    "Barnala",
+    "Bathinda",
+    "Faridkot",
+    "Fatehgarh Sahib",
+    "Fazilka",
+    "Ferozepur",
+    "Gurdaspur",
+    "Hoshiarpur",
+    "Jalandhar",
+    "Kapurthala",
+    "Ludhiana",
+    "Malerkotla",
+    "Mansa",
+    "Moga",
+    "Muktsar",
+    "Pathankot",
+    "Patiala",
+    "Rupnagar",
+    "Sangrur",
+    "SAS Nagar",
+    "Shaheed Bhagat Singh Nagar",
+    "Sri Muktsar Sahib",
+    "Tarn Taran"
+]
+export default Punjab

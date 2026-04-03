@@ -1,0 +1,431 @@
+import { useParams, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { FiStar, FiChevronDown, FiRotateCcw, FiBox, FiShield, FiCheck, FiDollarSign, FiLock, FiMapPin } from "react-icons/fi"
+import { TbTruckDelivery } from "react-icons/tb"
+import { MdPayments } from "react-icons/md";
+import PhoneOptions from "../../components/component1/PhoneOptions";
+import AddToCart from "../../components/component1/AddToCart";
+import ExploreEarPhoneProduct from "../../components/component2/ExploreEarPhoneProduct";
+import earPhoneService from "../../services/earPhoneService/earPhoneService";
+import Navbar from "../../components/component1/Navbar";
+import addToCartService from "../../services/addToCartService";
+import allCartProductsService from "../../services/allCartProductsService";
+import locationService from "../../services/locationService";
+
+function SelectedEarPhonePage() {
+    let params = useParams();
+    const navigate = useNavigate();
+    let product = params.id;
+
+    const [popup, setPopup] = useState(false);
+    const [cartMessage, setCartMessage] = useState("");
+    const [earPhoneData, setEarPhoneData] = useState({})
+    const [itemQuantity, setItemQuantity] = useState(1);
+    const [cartValue, setCartValue] = useState(false)
+    const [locationName, setLocationName] = useState("")
+    const [location, setLocation] = useState([])
+    const [locationFlag, setLocationFlag] = useState(false)
+    const [locationMessageFlag, setLocationMessageFlag] = useState(false)
+    const [buyClicked, setBuyClicked] = useState(false)
+
+    useEffect(() => {
+        const earPhoneDetails = async () => {
+            const earPhone = await earPhoneService()
+            for (let i = 0; i < earPhone.data.productData.length; i++) {
+                if (earPhone.data.productData[i]._id === product) {
+                    setEarPhoneData(earPhone.data.productData[i]);
+                }
+            }
+        }
+        earPhoneDetails();
+        window.scrollTo(0, 0)
+    }, [product])
+
+    useEffect(() => {
+        const cart = async () => {
+            const response = await allCartProductsService()
+            if (response) {
+                for (let i = 0; i < response.data.cartDetails.orders.length; i++) {
+                    if (response.data.cartDetails.orders[i].productID === product) {
+                        setCartValue(true)
+                    }
+                }
+            }
+        }
+        cart()
+    }, [])
+
+    useEffect(() => {
+        const locationData = async () => {
+            const response = await locationService()
+            if (response) {
+                setLocationName(response.data.fullname)
+            }
+            if (!(response.data.defaultLocation)) {
+                setLocationFlag(false)
+            } else {
+                setLocationFlag(true)
+                for (let i = 0; i < response.data.location.length; i++) {
+                    if (response.data.location[i]._id === response.data.defaultLocation) {
+                        setLocation(response.data.location[i])
+                    }
+                }
+            }
+        }
+        locationData()
+    }, [])
+
+    const addToCart = (id, c) => {
+        const cart = async () => {
+            const responseCart = await addToCartService(id, c, true)
+            if (responseCart) {
+                setCartMessage(responseCart);
+                setPopup(true)
+                setTimeout(() => {
+                    setPopup(false)
+                }, 5000)
+            } else {
+                setCartMessage(responseCart);
+            }
+        }
+        cart();
+    }
+
+    const CartPage = () => {
+        navigate("/cart")
+    }
+
+    const paymentButton = () => {
+        setBuyClicked(true)
+        if (locationFlag) {
+            setLocationMessageFlag(true)
+            setTimeout(() => {
+                navigate(`/product/${product}/orderSummary?quantity=${itemQuantity}&category=Earphones`)
+            }, 2000)
+        } else {
+            setLocationMessageFlag(false)
+        }
+    }
+
+    const openLocationPage = () => {
+        navigate("/account/update-location")
+    }
+
+    return (
+        <>
+            <Navbar />
+            {buyClicked && !locationMessageFlag && (
+                <div className="fixed top-4 right-4 z-50 bg-white rounded-xl shadow-xl border border-red-200 p-4 flex items-center gap-3">
+                    <FiMapPin className="text-red-500" size={20} />
+                    <p className="text-red-500 font-semibold text-sm">Please add a delivery location to buy</p>
+                    <button onClick={() => openLocationPage()} className="text-sky-600 font-semibold text-sm underline">Add Location</button>
+                </div>
+            )}
+
+            {/* ── DESKTOP ── */}
+            <div className="hidden md:flex flex-col">
+                {popup && <AddToCart cartMessage={cartMessage} />}
+                <div className="border hidden md:flex flex-row m-3 mt-1 bg-white">
+
+                    {/* Earphone Image */}
+                    <div className="h-[50vh] lg:h-[100vh] w-[35%] lg:w-[40%] flex items-center justify-center">
+                        <img
+                            src={earPhoneData.earphonesImages?.[0]}
+                            alt="Error 404"
+                            className="h-[55%] w-[55%] lg:h-[70%] lg:w-[70%]"
+                        />
+                    </div>
+
+                    <div className="mx-3 pt-3 w-[55%] flex flex-col">
+
+                        {/* Brand */}
+                        <h3 className="font-bold text-2xl">{earPhoneData.earphonesBrand}</h3>
+
+                        {/* Earphone Name + Specs */}
+                        <p className="flex font-medium text-xl mt-1">
+                            {earPhoneData.earphonesName} ({earPhoneData.color}) | {earPhoneData.productCategory} | {earPhoneData.earphonesType} | {earPhoneData.connectivity} | {earPhoneData.noiseCancellation} | {earPhoneData.description?.highlights}
+                        </p>
+
+                        {/* Ratings */}
+                        <div className="flex items-center gap-1 mt-3">
+                            <h3 className="font-medium text-lg">0.0</h3>
+                            <div className="flex">
+                                <FiStar className="font-medium text-lg" />
+                                <FiStar className="font-medium text-lg" />
+                                <FiStar className="font-medium text-lg" />
+                                <FiStar className="font-medium text-lg" />
+                                <FiStar className="font-medium text-lg" />
+                            </div>
+                            <div className="flex items-center">
+                                <FiChevronDown className="font-medium text-lg" />
+                                <h3 className="font-medium text-lg text-sky-600">({earPhoneData.reviews?.length ?? 0})</h3>
+                            </div>
+                        </div>
+
+                        {/* Total Sell */}
+                        <div className="flex mt-3 gap-1">
+                            <h3 className="font-bold text-md">{earPhoneData.totalSell}+ bought</h3>
+                            <h3 className="text-md">in past month</h3>
+                        </div>
+
+                        <div className="border-gray-300 border mt-3"></div>
+
+                        {/* Price */}
+                        <div className="mt-5 m-3 mb-0 flex flex-row gap-3">
+                            <h3 className="font-medium text-2xl text-red-400">-{earPhoneData.discount}%</h3>
+                            <div className="flex">
+                                <h3>₹</h3>
+                                <h3 className="text-3xl font-semibold">{earPhoneData.currentPrice}</h3>
+                            </div>
+                        </div>
+                        <div className="m-3 mt-1 flex gap-1">
+                            <h3>M.R.P:</h3>
+                            <h3 className="line-through">₹{earPhoneData.oldPrice}</h3>
+                            <h3 className="text-gray-300 px-3">|</h3>
+                            <h3 className="text-sky-600">Price history</h3>
+                        </div>
+
+                        {/* Trust Badges */}
+                        <div className="flex gap-3 overflow-y-auto">
+                            <div className="gap-1 flex flex-col items-center w-[20%]">
+                                <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+                                    <FiBox className="text-3xl text-orange-400" />
+                                    <FiRotateCcw className="text-gray-500 absolute" size={50} strokeWidth={1} />
+                                </div>
+                                <h3 className="font-semibold text-md text-center text-sky-600">10 days Return & Exchange</h3>
+                            </div>
+                            <div className="gap-1 flex flex-col items-center w-[20%]">
+                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+                                    <TbTruckDelivery className="text-gray-500" size={50} strokeWidth={1} />
+                                </div>
+                                <h3 className="font-semibold text-md text-center text-sky-600">Free Delivery</h3>
+                            </div>
+                            <div className="gap-1 flex flex-col items-center w-[20%]">
+                                <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+                                    <FiShield className="text-gray-500" size={40} strokeWidth={1} />
+                                    <FiCheck className="text-orange-400 absolute" />
+                                </div>
+                                <h3 className="font-semibold text-md text-center text-sky-600">Easy Returns</h3>
+                            </div>
+                            <div className="gap-1 flex flex-col items-center w-[20%]">
+                                <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+                                    <MdPayments className="text-gray-500" size={30} strokeWidth={1} />
+                                </div>
+                                <h3 className="font-semibold text-md text-center text-sky-600">Pay on Delivery</h3>
+                            </div>
+                            <div className="gap-1 flex flex-col items-center w-[20%]">
+                                <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+                                    <FiLock className="text-gray-500" size={50} strokeWidth={1} />
+                                    <FiDollarSign className="text-orange-400 absolute mt-5" size={20} />
+                                </div>
+                                <h3 className="font-semibold text-md text-center text-sky-600">Secure Transaction</h3>
+                            </div>
+                        </div>
+
+                        <div className="border-gray-300 border mt-3"></div>
+
+                        {/* Location */}
+                        <div className="flex flex-row m-3 mt-1 items-center gap-2 min-w-0 cursor-pointer" onClick={() => openLocationPage()}>
+                            <FiMapPin className="text-lg self-start mt-1" />
+                            <p className="text-lg text-sky-600 font-semibold">
+                                Delivering to {locationFlag ? `${location.street}, ${location.town}, ${location.pincode}` : "ABC - XYZ - 123456"}
+                            </p>
+                            <p className="text-lg text-black font-semibold">- Update Location</p>
+                        </div>
+
+                        {/* Quantity + Buttons */}
+                        <div className="flex flex-col gap-3 mt-3 mx-3">
+                            <div className="flex border mt-1 px-3 py-1 w-[40%] gap-1 rounded-lg bg-gray-100 hover:bg-gray-200 transition duration-300">
+                                <h3 className="text-lg font-medium">Quantity: </h3>
+                                <select onChange={(e) => setItemQuantity(e.target.value)} className="outline-none w-[100%]">
+                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                                        <option key={n} value={n}>{n}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex border px-3 py-2 w-[40%] gap-1 rounded-3xl bg-yellow-400 items-center justify-center hover:bg-yellow-500 transition duration-300">
+                                {!cartValue
+                                    ? <button className="text-lg" onClick={() => addToCart(earPhoneData._id, earPhoneData.productCategory)}>Add to cart</button>
+                                    : <button className="text-lg" onClick={() => CartPage()}>Go to cart</button>
+                                }
+                            </div>
+                            <div className="flex border px-3 py-2 mb-3 w-[40%] gap-1 rounded-3xl bg-amber-500 items-center justify-center hover:bg-orange-500 transition duration-300">
+                                <button className="text-lg" onClick={() => paymentButton()}>Buy now</button>
+                            </div>
+                        </div>
+
+                        {/* About this item — earphone schema fields */}
+                        <div className="mt-3 flex flex-col">
+                            <h3 className="text-xl font-bold">About this item</h3>
+                            <ul className="list-disc pl-4">
+                                <li>{earPhoneData.description?.highlights}</li>
+                                <li>Sound: {earPhoneData.description?.sound}</li>
+                                <li>Connectivity: {earPhoneData.description?.connectivity}</li>
+                                <li>Battery: {earPhoneData.description?.battery}</li>
+                                <li>{earPhoneData.description?.extras}</li>
+                                {earPhoneData.batteryLife && <li>Battery Life: {earPhoneData.batteryLife}</li>}
+                                {earPhoneData.chargingTime && <li>Charging Time: {earPhoneData.chargingTime}</li>}
+                                {earPhoneData.driverSize && <li>Driver Size: {earPhoneData.driverSize}</li>}
+                                {earPhoneData.frequencyResponse && <li>Frequency Response: {earPhoneData.frequencyResponse}</li>}
+                                {earPhoneData.noiseCancellation && earPhoneData.noiseCancellation !== "None" && <li>Noise Cancellation: {earPhoneData.noiseCancellation}</li>}
+                                {earPhoneData.microphoneType && <li>Microphone: {earPhoneData.microphoneType}</li>}
+                                {earPhoneData.waterResistance && earPhoneData.waterResistance !== "None" && <li>Water Resistance: {earPhoneData.waterResistance}</li>}
+                                {earPhoneData.earphonesCondition && <li>Condition: {earPhoneData.earphonesCondition}</li>}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col mt-0 m-3">
+                    <h3 className="text-2xl font-bold">Explore top deals in related categories</h3>
+                </div>
+                <div>
+                    <ExploreEarPhoneProduct />
+                </div>
+            </div>
+
+            {/* ── MOBILE ── */}
+            <div className="border flex flex-col md:hidden">
+                {popup && <AddToCart cartMessage={cartMessage} />}
+
+                {/* Earphone Image */}
+                <div className="flex items-center justify-center m-3 mt-1 py-3">
+                    <img src={earPhoneData.earphonesImages?.[0]} alt="Error 404" className="w-[40%]" />
+                </div>
+
+                <div className="py-[2px] bg-gray-200"></div>
+
+                {/* Brand + Name */}
+                <div className="flex flex-col m-3 mt-1 gap-1">
+                    <h3 className="font-bold text-xl">{earPhoneData.earphonesBrand}</h3>
+                    <p className="font-semibold text-xl line-clamp-2 break-words px-1">
+                        {earPhoneData.earphonesName} ({earPhoneData.color}) | {earPhoneData.earphonesType} | {earPhoneData.connectivity}
+                    </p>
+                </div>
+
+                {/* ANC Badge */}
+                {earPhoneData.noiseCancellation === "Active Noise Cancellation" && (
+                    <div className="mx-3 mb-1">
+                        <span className="text-sm font-semibold text-green-700 bg-green-100 rounded-full px-3 py-1">
+                            ✦ Active Noise Cancellation
+                        </span>
+                    </div>
+                )}
+
+                {/* Price */}
+                <div className="flex flex-row m-3 mt-1 gap-3 items-center">
+                    <h3 className="text-2xl text-red-600">-{earPhoneData.discount}%</h3>
+                    <div className="flex items-center">
+                        <h3>₹</h3>
+                        <h4 className="text-3xl font-semibold">{earPhoneData.currentPrice}</h4>
+                    </div>
+                </div>
+
+                {/* Location */}
+                <div className="flex flex-wrap items-center gap-2 m-3 mt-1 cursor-pointer" onClick={() => openLocationPage()}>
+                    <FiMapPin className="text-lg shrink-0" />
+                    <p className="text-base text-sky-600 font-semibold min-w-0">
+                        Delivering to {locationFlag ? `${location.street}, ${location.town}, ${location.pincode}` : "ABC - XYZ - 123456"}
+                    </p>
+                    <p className="text-base text-black font-medium cursor-pointer whitespace-nowrap hover:underline">
+                        - Update Location
+                    </p>
+                </div>
+
+                {/* Quantity + Buttons */}
+                <div className="flex flex-col gap-3 m-3 items-center justify-center">
+                    <div className="flex border mt-1 px-3 py-3 gap-1 rounded-lg bg-gray-100 w-full">
+                        <h3 className="text-lg font-medium">Quantity: </h3>
+                        <select onChange={(e) => setItemQuantity(e.target.value)} className="outline-none w-full flex-1">
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                                <option key={n} value={n}>{n}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex border px-3 py-3 gap-1 rounded-xl bg-yellow-400 items-center justify-center hover:bg-yellow-500 transition duration-300 w-full">
+                        {!cartValue
+                            ? <button className="text-lg" onClick={() => addToCart(earPhoneData._id, earPhoneData.productCategory)}>Add to cart</button>
+                            : <button className="text-lg" onClick={() => CartPage()}>Go to cart</button>
+                        }
+                    </div>
+                    <div className="flex border px-3 py-3 mb-3 gap-1 rounded-xl bg-amber-500 items-center justify-center hover:bg-orange-500 transition duration-300 w-full">
+                        <button className="text-lg" onClick={() => paymentButton()}>Buy now</button>
+                    </div>
+                </div>
+
+                {/* Seller Info */}
+                <div className="flex m-3 mt-1 gap-3 items-center justify-between w-[60%]">
+                    <div className="flex flex-col text-md">
+                        <h3>Shop From</h3>
+                        <h3>Sold by</h3>
+                    </div>
+                    <div className="flex flex-col text-md">
+                        <h3>MiniShop</h3>
+                        <h3 className="text-sky-600 font-semibold">XYZ</h3>
+                    </div>
+                </div>
+
+                <div className="border-gray-600 border"></div>
+
+                {/* Shop with confidence */}
+                <div className="flex flex-col m-3">
+                    <h3 className="font-semibold text-xl">Shop with confidence</h3>
+                    <div className="mt-3 flex flex-col">
+                        <div className="flex gap-3">
+                            <div className="flex items-center w-1/2 gap-3">
+                                <FiBox className="text-xl self-start mt-1" />
+                                <h3 className="text-md self-start mt-1 text-sky-600">10 days Return & Exchange</h3>
+                            </div>
+                            <div className="flex items-center w-1/2 gap-3">
+                                <MdPayments className="text-xl self-start mt-1" />
+                                <h3 className="text-md self-start mt-1 text-sky-600">Pay on Delivery</h3>
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <div className="flex items-center gap-3 w-1/2">
+                                <TbTruckDelivery className="text-xl self-start mt-1" />
+                                <h3 className="text-md self-start mt-1 text-sky-600">Free Delivery</h3>
+                            </div>
+                            <div className="flex items-center gap-3 w-1/2">
+                                <FiLock className="text-xl self-start mt-1" />
+                                <h3 className="text-md self-start mt-1 text-sky-600">Secure transaction</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* About this item — earphone schema fields */}
+                <div className="flex flex-col m-3">
+                    <h3 className="font-bold text-xl">About this item</h3>
+                    <ul className="list-disc pl-4 font-medium text-lg">
+                        <li>{earPhoneData.description?.highlights}</li>
+                        <li>Sound: {earPhoneData.description?.sound}</li>
+                        <li>Connectivity: {earPhoneData.description?.connectivity}</li>
+                        <li>Battery: {earPhoneData.description?.battery}</li>
+                        <li>{earPhoneData.description?.extras}</li>
+                        {earPhoneData.batteryLife && <li>Battery Life: {earPhoneData.batteryLife}</li>}
+                        {earPhoneData.chargingTime && <li>Charging Time: {earPhoneData.chargingTime}</li>}
+                        {earPhoneData.driverSize && <li>Driver Size: {earPhoneData.driverSize}</li>}
+                        {earPhoneData.frequencyResponse && <li>Frequency Response: {earPhoneData.frequencyResponse}</li>}
+                        {earPhoneData.noiseCancellation && earPhoneData.noiseCancellation !== "None" && <li>Noise Cancellation: {earPhoneData.noiseCancellation}</li>}
+                        {earPhoneData.microphoneType && <li>Microphone: {earPhoneData.microphoneType}</li>}
+                        {earPhoneData.waterResistance && earPhoneData.waterResistance !== "None" && <li>Water Resistance: {earPhoneData.waterResistance}</li>}
+                        {earPhoneData.earphonesCondition && <li>Condition: {earPhoneData.earphonesCondition}</li>}
+                    </ul>
+                </div>
+
+                <div className="py-[3px] bg-gray-200"></div>
+
+                <div className="flex flex-col mt-0 m-3">
+                    <h3 className="text-lg font-bold">Explore top deals in related categories</h3>
+                </div>
+                <div className="mt-0">
+                    <ExploreEarPhoneProduct />
+                </div>
+                <PhoneOptions />
+            </div>
+        </>
+    )
+}
+
+export default SelectedEarPhonePage

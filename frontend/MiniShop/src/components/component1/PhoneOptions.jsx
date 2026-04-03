@@ -1,16 +1,18 @@
 import { FiHome, FiUser, FiMenu, FiShoppingCart } from "react-icons/fi";
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom"
 function PhoneOptions() {
+    const navigate = useNavigate();
     const selectOptions = [
         { index: 0, icon: <FiHome />, name: "Home" },
         { index: 1, icon: <FiUser />, name: "Account" },
-        { index: 2, icon: <FiMenu />, name: "Menu" },
+        { index: 2, icon: <FiMenu />, name: "Order" },
         { index: 3, icon: <FiShoppingCart />, name: "Cart" },
     ];
     const [active, setActive] = useState(0)
-    const SetActiveOption = (index) => {
+    const SetActiveOption = (index, name) => {
         setActive(index)
+        navigate(`/${name.toLowerCase()}`)
     }
     useEffect(() => {
         console.log("Indez is active: ", active)
@@ -20,7 +22,7 @@ function PhoneOptions() {
             flex justify-around items-center py-2 md:hidden z-50 ">
             {selectOptions.map((option) => (
                 <button
-                    onClick={() => SetActiveOption(option.index)}
+                    onClick={() => SetActiveOption(option.index, option.name)}
                     key={option.index}
                     className="flex flex-col items-center cursor-pointer 
                      hover:text-sky-700 transition"

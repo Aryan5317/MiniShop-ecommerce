@@ -30,7 +30,48 @@ const userSchema = new Schema({
     },
     refreshToken: {
         type: String,
-    }
+    },
+    location: [
+        {
+            city: {
+                type: String,
+                default: "ABC",
+                required: true,
+            },
+            country: {
+                type: String,
+                default: "India",
+            },
+            pincode: {
+                type: String,
+                default: "123456",
+                required: true,
+            },
+            state: {
+                type: String,
+                default: "XYZ",
+                required: true,
+            },
+            town: {
+                type: String,
+                default: "XYZ",
+            },
+            street: {
+                type: String,
+                default: "",
+            },
+            district: {
+                type: String,
+                required: true,
+                default: "ABC"
+            },
+        }
+    ],
+    defaultLocation: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    },
+
 }, { timestamps: true })
 
 userSchema.pre("save", async function () {

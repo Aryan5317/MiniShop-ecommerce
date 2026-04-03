@@ -31,6 +31,10 @@ const mobileSchema = new Schema({
     category: {
         type: String,
     },
+    productCategory: {
+        type: String,
+        required: true,
+    },
     description: {
         highlights: {
             type: String,
@@ -70,21 +74,10 @@ const mobileSchema = new Schema({
         max: 1,
         required: true,
     },
-    ratings: {
-        type: Number,
-        min: 0,
-        max: 5,
-        default: 0,
-    },
     color: {
         type: String,
     },
-    addToCart: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-    totalSell:{
+    totalSell: {
         type: Number,
         default: 0,
     },

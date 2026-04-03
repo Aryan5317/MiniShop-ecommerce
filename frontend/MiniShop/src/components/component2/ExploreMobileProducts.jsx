@@ -1,41 +1,56 @@
 import phoneDetailsService from "../../services/mobileServices/phoneDetailsService"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { FiStar } from "react-icons/fi"
+
 function ExploreMobileProducts() {
+    const navigate = useNavigate()
     const [productData, setProductData] = useState([])
+
     useEffect(() => {
         const products = async () => {
             const productDetails = await phoneDetailsService();
-            console.log("Product details: ", productDetails.data.phoneData)
-            const len = productDetails.data.phoneData.length;
+            console.log("Product details: ", productDetails.data.productData)
+            const len = productDetails.data.productData.length;
             for (let i = 0; i < len; i++) {
                 for (let j = 0; j < len - i - 1; j++) {
-                    if (productDetails.data.phoneData?.[j].discount < productDetails.data.phoneData?.[j + 1].discount) {
-                        let temp = productDetails.data.phoneData?.[j];
-                        productDetails.data.phoneData[j] = productDetails.data.phoneData?.[j + 1];
-                        productDetails.data.phoneData[j + 1] = temp;
+                    if (productDetails.data.productData?.[j].discount < productDetails.data.productData?.[j + 1].discount) {
+                        let temp = productDetails.data.productData?.[j];
+                        productDetails.data.productData[j] = productDetails.data.productData?.[j + 1];
+                        productDetails.data.productData[j + 1] = temp;
                     }
                 }
             }
-            console.log("New Product details is: ", productDetails.data.phoneData);
-            setProductData(productDetails.data.phoneData);
+            console.log("New Product details is: ", productDetails.data.productData);
+            setProductData(productDetails.data.productData);
         }
         products();
     }, [])
 
+    const navigatePhonePage = (id) => {
+        console.log("Navigation to: ", id)
+        navigate(`/phones/${id}`)
+        window.scrollTo(0, 0)
+    }
+
     return (
-        <div className="m-3 flex flex-row">
-            <div className="flex flex-row">
+        <div className="overflow-x-auto">
+            <div className="flex flex-row w-max pb-15">
                 {productData.map((data) => (
-                    <div key={data._id} className="flex-1 m-3 items-center flex flex-col overflow-y-hidden">
-                        <div className="w-full flex justify-center">
-                            <img src={data.phoneImages?.[0]} alt="" className="h-[32vh] w-[50%]" />
+                    <div
+                        key={data._id}
+                        onClick={() => navigatePhonePage(data._id)}
+                        className="w-[160px] sm:w-[220px] lg:w-[280px] m-3 border border-gray-200 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 items-center flex flex-col shrink-0 bg-white p-2 cursor-pointer">
+                        <div className="w-full flex justify-center overflow-hidden h-[10vh] sm:h-[25vh] lg:h-[32vh]">
+                            <img src={data.phoneImages?.[0]} alt="" className="h-full w-full object-contain" />
                         </div>
-                        <div className="mt-1">
-                            <p className="text-sky-600 text-center line-clamp-4 text-md font-semibold">{data.phoneName}({data.color}, {data.phoneRam}GB + {data.phoneStorage}GB) | {data.description.display} | {data.description.camera}</p>
+                        <div className="mt-1 flex">
+                            <p className="text-sky-600 text-left line-clamp-4 text-md font-semibold">
+                                {data.phoneName}({data.color}, {data.phoneRam}GB + {data.phoneStorage}GB) | {data.description.display} | {data.description.camera}
+                            </p>
                         </div>
                         <div className="flex flex-row justify-start w-full mt-1 gap-3 px-1 items-center">
-                            <div className="flex flex-row ">
+                            <div className="flex flex-row">
                                 <FiStar className="text-xl text-orange-500" />
                                 <FiStar className="text-xl text-orange-500" />
                                 <FiStar className="text-xl text-orange-500" />
@@ -57,9 +72,11 @@ function ExploreMobileProducts() {
                         <div className="flex flex-row justify-start w-full">
                             <h3 className="text-md">FREE Delivery over ₹499.</h3>
                         </div>
-                        {(data.stock < 3) && <div className="flex flex-row  justify-start w-full">
-                            <h3 className="flex flex-row text-md">Only {data.stock} left in stock.</h3>
-                        </div>}
+                        {(data.stock < 3) && (
+                            <div className="flex flex-row justify-start w-full">
+                                <h3 className="flex flex-row text-md text-red-500 font-semibold">Only {data.stock} left in stock.</h3>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

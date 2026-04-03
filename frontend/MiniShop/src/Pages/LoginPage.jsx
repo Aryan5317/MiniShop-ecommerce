@@ -1,4 +1,3 @@
-import { LoginBrowserImage, LoginMobileImage, LoginBrowserImage1 } from "../context/handlingImages/loginImage.js"
 import { FaBagShopping } from "react-icons/fa6";
 import { FiMail, FiLock, FiEye, FiEyeOff, } from "react-icons/fi"
 import { useState, useContext } from "react";
@@ -78,7 +77,7 @@ function LoginPage() {
       <div>
         <div className="hidden sm:flex relative w-full h-screen items-center justify-center overflow-hidden">
           <img
-            src={LoginBrowserImage1}
+            src="https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116708/LoginBrowserImage1_nt0lro.png"
             alt="Login Background"
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -153,7 +152,7 @@ function LoginPage() {
       <div>
         <div className="md:hidden relative flex justify-center items-center w-screen h-screen overflow-hidden">
           <img
-            src={LoginMobileImage}
+            src="https://res.cloudinary.com/dpbsi7b4y/image/upload/v1775116709/LoginMobileImage_zcff3s.png"
             alt="Login Background"
             className="absolute inset-0 w-full h-full object-cover"
           />

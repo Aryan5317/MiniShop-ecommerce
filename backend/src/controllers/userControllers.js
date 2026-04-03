@@ -34,7 +34,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     if (!username) {
         throw new ApiError(400, "*Username is required")
     }
-    else if (!fullnameRegix.test(fullname)) {
+    else if (!fullnameRegix.test(username)) {
         throw new ApiError(400, "*Only Charachter and spaces are allowed")
     }
     else {
@@ -293,7 +293,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
 })
 
 const refreshAccessToken = asyncHandler(async (req, res, next) => {
-    const incomingRefreshToken = req.cookies.refreshToken || req.body
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
     console.log("New refresh Token is: ", incomingRefreshToken)
     if (!incomingRefreshToken) {
         throw new ApiError(404, "Unauthorized User")
@@ -314,11 +314,11 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
         if (!(incomingRefreshToken === user?.refreshToken)) {
             throw new ApiError(404, "Refresh Token is expired or used")
         }
-        const { accessToken, newRefreshToken } = await genrateRefreshAndAccessToken(userId)
+        const { accessToken, refreshToken: newRefreshToken } = await genrateRefreshAndAccessToken(userId)
 
         const options = {
             httpOnly: true,
-            secure: true
+            secure: false
         }
 
         return res.status(200)
@@ -341,4 +341,206 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
 
 })
 
-export { registerUser, loginUser, verifyEmail, verifyOtp, resetPassword, refreshAccessToken }
+const updateDetails = asyncHandler(async (req, res, next) => {
+    const looginedInUser = req.verifyUser._id;
+    if (!looginedInUser) {
+        throw new ApiError(500, "UnAuthorized User");
+    }
+    const { name, newPassword, confirmPassword } = req.body;
+    const fullnameRegix = /^[A-Za-z\s]+$/
+    const passwordRegix = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/
+
+    console.log("Update Name is: ", name);
+    console.log("New Password is: ", newPassword);
+    console.log("Confirm Password is: ", confirmPassword);
+
+    const getUserDetails = await User.findById(looginedInUser)
+    if (name && !newPassword && !confirmPassword) {
+        if (!fullnameRegix.test(name)) {
+            throw new ApiError(400, "*Only Characters and spaces are allowed")
+        }
+        const fullname = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+        getUserDetails.fullname = fullname
+        await getUserDetails.save({ validateBeforeSave: false })
+        return res.status(200)
+            .json(new ApiResponse(200, {}, "Name Updated Successfully"))
+    }
+    if (newPassword && confirmPassword && !name) {
+        if (!(newPassword.length > 7 && newPassword.length < 16)) {
+            throw new ApiError(400, "*Password length must be between 8 and 15")
+        }
+        if (!passwordRegix.test(newPassword)) {
+            throw new ApiError(400, "*Atleast 1 uppercase, 1 lowercase and 1 number is required")
+        }
+        if (!(confirmPassword.length > 7 && confirmPassword.length < 16)) {
+            throw new ApiError(400, "*Confirm Password length must be between 8 and 15")
+        }
+        if (!passwordRegix.test(confirmPassword)) {
+            throw new ApiError(400, "*Atleast 1 uppercase, 1 lowercase and 1 number is required")
+        }
+        if (newPassword !== confirmPassword) {
+            throw new ApiError(400, "*Password and Confirm Password must be same")
+        }
+        getUserDetails.password = newPassword
+        await getUserDetails.save()
+        return res.status(200)
+            .json(new ApiResponse(200, {}, "Password Updated Successfully"))
+    }
+    if (name && newPassword && confirmPassword) {
+        if (!fullnameRegix.test(name)) {
+            throw new ApiError(400, "*Only Characters and spaces are allowed")
+        }
+        if (!(newPassword.length > 7 && newPassword.length < 16)) {
+            throw new ApiError(400, "*Password length must be between 8 and 15")
+        }
+        if (!passwordRegix.test(newPassword)) {
+            throw new ApiError(400, "*Atleast 1 uppercase, 1 lowercase and 1 number is required")
+        }
+        if (newPassword !== confirmPassword) {
+            throw new ApiError(400, "*Password and Confirm Password must be same")
+        }
+        const fullname = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+        getUserDetails.fullname = fullname
+        getUserDetails.password = newPassword
+        await getUserDetails.save()
+        return res.status(200)
+            .json(new ApiResponse(200, {}, "Details Updated Successfully"))
+    }
+
+    throw new ApiError(400, "No valid data provided to update")
+})
+
+const logoutUser = asyncHandler(async (req, res, next) => {
+    await User.findByIdAndUpdate(
+        req.verifyUser._id,
+        {
+            $unset: {
+                // it is use for removing particular schema variable from database
+                // in this case refreshToken is removed
+                refreshToken: 1
+            }
+        }, {
+        new: true
+    }
+    )
+    console.log("User Logged Out", req.verifyUser._id)
+
+    const options = {
+        httpOnly: true,
+        secure: false
+    }
+    return res.status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse(200, {}, "User Logout Successfully"))
+})
+
+const fetchLocation = asyncHandler(async (req, res, next) => {
+    const looginedInUser = req.verifyUser._id;
+    if (!looginedInUser) {
+        throw new ApiError(500, "UnAuthorized User")
+    }
+    const fetchUserDetails = await User.findById(looginedInUser)
+    console.log("User details: ", fetchUserDetails)
+    if (!fetchUserDetails.location) {
+        throw new ApiError(404, "No any location found")
+    }
+    return res.status(200)
+        .json(new ApiResponse(200, { location: fetchUserDetails.location, fullname: fetchUserDetails.fullname, defaultLocation: fetchUserDetails.defaultLocation }, "Location Fetched"))
+})
+
+const addLocation = asyncHandler(async (req, res, next) => {
+    const looginedInUser = req.verifyUser._id;
+    if (!looginedInUser) {
+        throw new ApiError(500, "UnAuthorized User");
+    }
+    const { street, town, pincode, district, state, city, country } = req.body;
+    console.log("Streer is: ", street)
+    console.log("town is: ", town)
+    console.log("pincode is: ", pincode)
+    console.log("district is: ", district)
+    console.log("state is: ", state)
+    console.log("city is: ", city)
+    console.log("country is: ", country)
+
+    const fetchUserDetails = await User.findById(looginedInUser)
+    if (!fetchUserDetails.location || fetchUserDetails.location.length === 0) {
+        fetchUserDetails.location = [{
+            street,
+            town,
+            pincode,
+            district,
+            state,
+            city,
+            country
+        }];
+        await fetchUserDetails.save()
+        fetchUserDetails.defaultLocation = fetchUserDetails.location[0]._id
+        await fetchUserDetails.save({ validateBeforeSave: false })
+
+    }
+    else {
+        fetchUserDetails.location.push({
+            street,
+            town,
+            pincode,
+            district,
+            state,
+            city,
+            country
+        });
+    }
+    await fetchUserDetails.save()
+
+    const getDefaultLocation = await User.findById(looginedInUser)
+    console.log("Default location is: ", getDefaultLocation.defaultLocation)
+    return res.status(200)
+        .json(new ApiResponse(200, {}, "Location added Successfully"))
+})
+
+const deleteLocation = asyncHandler(async (req, res, next) => {
+    const looginedInUser = req.verifyUser._id;
+    if (!looginedInUser) {
+        throw new ApiError(500, "UnAuthorized User");
+    }
+    const { id } = req.body;
+    console.log("Location Id is: ", id)
+    await User.findByIdAndUpdate(
+        looginedInUser,
+        {
+            $pull: { location: { _id: id } }
+        },
+        { new: true }
+    )
+
+    return res.status(200)
+        .json(new ApiResponse(200, {}, "Location deleted"))
+
+})
+
+const updateSelectedLocation = asyncHandler(async (req, res, next) => {
+    const looginedInUser = req.verifyUser._id;
+    if (!looginedInUser) {
+        throw new ApiError(500, "UnAuthorized User");
+    }
+    const { id } = req.body;
+    console.log("Location id is: ", id)
+    const fetchUserDetails = await User.findById(looginedInUser)
+    console.log("User details: ", fetchUserDetails)
+    if (fetchUserDetails.location.length === 0) {
+        throw new ApiError(404, "No any location found")
+    }
+    if (!id) {
+        fetchUserDetails.defaultLocation = fetchUserDetails.location[0]._id;
+        await fetchUserDetails.save()
+    }
+    else {
+        fetchUserDetails.defaultLocation = id;
+        await fetchUserDetails.save();
+    }
+    return res.status(200)
+        .json(new ApiResponse(200, { location: fetchUserDetails.location, fullname: fetchUserDetails.fullname, defaultLocation: fetchUserDetails.defaultLocation }, "Default location set"))
+})
+
+
+export { registerUser, loginUser, verifyEmail, verifyOtp, resetPassword, refreshAccessToken, updateDetails, logoutUser, fetchLocation, addLocation, deleteLocation, updateSelectedLocation }

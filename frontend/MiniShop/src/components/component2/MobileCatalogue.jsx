@@ -4,14 +4,18 @@ import { propContext } from "../../context/contextApi";
 import { FaStar } from "react-icons/fa"
 
 
-function MobileCatalogue() {
+function MobileCatalogue({ url }) {
     const { storeInputValue } = useContext(propContext)
     return (
         <div className="w-full flex flex-col items-center justify-between bg-white shadow-[0_6px_6px_-4px_rgba(0,0,0,0.2)]">
-            <div className=" w-full flex items-center jusitfy-center ">
-                <img src="\src\assets\phoneCategory\mobileBanner.png" alt="Error 404" className="h-[120px] w-full md:h-[220px] rounded" />
+            <div className="w-full flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
+                <img
+                    src={url}
+                    alt="Banner"
+                    className="h-[120px] md:h-[220px] w-full object-fill rounded-lg"
+                />
             </div>
-            <div className= "border-gray-400 border mt-1 flex flex-row justify-between w-full items-center">
+            <div className="border-gray-400 border mt-1 flex flex-row justify-between w-full items-center">
                 <div className=" flex flex-row hidden md:flex m-1 py-1">
                     <h3 className="flex text-black px-1 text-md font-medium">1-48 of 797 results for</h3>
                     <h3 className="flex text-sky-600 px-1 text-md font-semibold">{storeInputValue.trim() && `"${storeInputValue}"`}</h3>
