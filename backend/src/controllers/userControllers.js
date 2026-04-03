@@ -128,7 +128,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
         .select("-password -refreshToken")
     const options = {
         httpOnly: true, // it makes only accessible by server not by client(browser)
-        secure: false, // for localhost always false and after deploy use true here
+        secure: true, // for localhost always false and after deploy use true here
         sameSite: "Lax",
         path: "/"
     }
@@ -318,7 +318,7 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
 
         const options = {
             httpOnly: true,
-            secure: false
+            secure: true
         }
 
         return res.status(200)
@@ -427,7 +427,7 @@ const logoutUser = asyncHandler(async (req, res, next) => {
 
     const options = {
         httpOnly: true,
-        secure: false
+        secure: true
     }
     return res.status(200)
         .clearCookie("accessToken", options)
