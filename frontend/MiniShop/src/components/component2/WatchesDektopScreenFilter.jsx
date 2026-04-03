@@ -22,7 +22,13 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
     useEffect(() => {
         const watchData = async () => {
             const watchDetails = await watchDetailsService()
-            setAllWatchData(watchDetails.data.productData)
+
+            if (watchDetails?.success) {
+                setAllWatchData(watchDetails.data.productData)
+            } else {
+                console.log("Error:", watchDetails?.message)
+                setAllWatchData([])
+            }
         }
         watchData()
     }, [])
@@ -39,7 +45,6 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         setStrapMaterials(straps)
     }, [allWatchData])
 
-    // ✅ Brand handler
     const handleBrandChange = (brand) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Brands.includes(brand)
@@ -52,7 +57,6 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Price handler
     const handlePriceChange = (e) => {
         setLocalFilter(prev => ({
             ...prev,
@@ -60,7 +64,6 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         }))
     }
 
-    // ✅ WatchType handler
     const handleWatchTypeChange = (type) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.WatchType.includes(type)
@@ -73,7 +76,6 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Strap handler
     const handleStrapChange = (strap) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Strap.includes(strap)
@@ -86,7 +88,6 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Movement handler
     const handleMovementChange = (movement) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Movement.includes(movement)
@@ -99,7 +100,6 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ DialSize handler
     const handleDialSizeChange = (size) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.DialSize.includes(size)
@@ -112,7 +112,6 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ WaterResistance handler
     const handleWaterResistanceChange = (resistance) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.WaterResistance.includes(resistance)
@@ -125,17 +124,17 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Apply button — send localFilter to parent
     const handleApplyFilter = () => {
         setFilterValue(localFilter)
         console.log("Filter Applied: ", localFilter)
     }
 
+    const minPrice = priceRange.length ? Math.min(...priceRange) : 0
+const maxPrice = priceRange.length ? Math.max(...priceRange) : 0
     return (
         <div className="border-gray-100 hidden md:flex flex-col w-[25%] shrink-0 min-h-screen">
             <div className="m-1 flex flex-col items-left justify-center px-3 pt-3 gap-3">
 
-                {/* Brands */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Brands</h3>
                     {brandsName.map((name, index) => (
@@ -151,29 +150,27 @@ function WatchesDektopScreenFilter({ setFilterValue }) {
                     ))}
                 </div>
 
-                {/* Price */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Price</h3>
                     <div className="flex items-center px-3 py-1">
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{Math.min(...priceRange)}</h3>
+                        <h3 className="text-lg font-medium">{minPrice}</h3>
                         <h3 className="px-1 text-lg font-normal">-</h3>
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{Math.max(...priceRange)}+</h3>
+                        <h3 className="text-lg font-medium">{maxPrice}+</h3>
                     </div>
                     <div className="px-3 py-1">
                         <input
                             className="w-full"
                             type="range"
-                            min={Math.min(...priceRange)}
-                            max={Math.max(...priceRange)}
-                            value={localFilter.price || Math.max(...priceRange)}
+                            min={minPrice}
+                            max={maxPrice}
+                            value={localFilter.price || maxPrice}
                             onChange={handlePriceChange}
                         />
                     </div>
                 </div>
 
-                {/* Watch Type */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Watch Type</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">

@@ -17,12 +17,20 @@ function OrderPage() {
     if (isLoggedIn) {
       const orders = async () => {
         const response = await getOrderScuccessService();
-        console.log("Response: ", response.data?.order?.orders);
+
+        if (!response?.success) {
+          console.log("Error:", response?.message)
+          setOrderSummary([])
+          setOrderMessage(true)
+          return
+        }
 
         const fetchedOrders = response?.data?.order?.orders || []
+
         if (fetchedOrders.length === 0) {
           setOrderMessage(true)
         }
+
         setOrderSummary(fetchedOrders)
       }
       orders()

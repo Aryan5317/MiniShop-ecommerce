@@ -16,11 +16,17 @@ function DesktopScreenFilterOption({ setFilterValue }) {
 
     useEffect(() => {
         const mobileData = async () => {
-            const phoneDetails = await phoneDetailsService()
-            setAllPhoneData(phoneDetails.data.productData)
-        }
-        mobileData()
-    }, [])
+            const phoneDetails = await phoneDetailsService();
+            if (phoneDetails?.success) {
+                setAllPhoneData(phoneDetails.data.productData);
+            } else {
+                console.log("Error:", phoneDetails?.message);
+                setAllPhoneData([]);
+            }
+        };
+
+        mobileData();
+    }, []);
 
     useEffect(() => {
         const brands = allPhoneData.map(phone => phone.phoneBrand)
@@ -70,6 +76,9 @@ function DesktopScreenFilterOption({ setFilterValue }) {
         console.log("Filter Applied: ", localFilter)
     }
 
+    const minPrice = priceRange.length ? Math.min(...priceRange) : 0
+    const maxPrice = priceRange.length ? Math.max(...priceRange) : 0
+
     return (
         <div className="border-gray-100 hidden md:flex flex-col w-[25%] shrink-0 min-h-screen">
             <div className="m-1 flex flex-col items-left justify-center px-3 pt-3 gap-3">
@@ -80,7 +89,7 @@ function DesktopScreenFilterOption({ setFilterValue }) {
                             <input
                                 type="checkbox"
                                 className="w-4 h-4 accent-sky-600"
-                                checked={localFilter.Brands.includes(name)} 
+                                checked={localFilter.Brands.includes(name)}
                                 onChange={() => handleBrandChange(name)}
                             />
                             {name}
@@ -91,18 +100,18 @@ function DesktopScreenFilterOption({ setFilterValue }) {
                     <h3 className="text-lg font-semibold">Price</h3>
                     <div className="flex items-center px-3 py-1">
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{localFilter.price ? localFilter.price : Math.min(...priceRange)}</h3>
+                        <h3 className="text-lg font-medium">{localFilter.price ? localFilter.price : minPrice}</h3>
                         <h3 className="px-1 text-lg font-normal">-</h3>
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{Math.max(...priceRange)}+</h3>
+                        <h3 className="text-lg font-medium">{maxPrice}+</h3>
                     </div>
                     <div className="px-3 py-1">
                         <input
                             className="w-full"
                             type="range"
                             min={Math.min(...priceRange)}
-                            max={Math.max(...priceRange)}
-                            value={localFilter.price || Math.max(...priceRange)} 
+                            max={maxPrice} 
+                            value={localFilter.price || maxPrice}
                             onChange={handlePriceChange}
                         />
                     </div>
@@ -115,7 +124,7 @@ function DesktopScreenFilterOption({ setFilterValue }) {
                                 <input
                                     type="checkbox"
                                     className="w-4 h-4 accent-sky-600"
-                                    checked={localFilter.Storage.includes(storage)} 
+                                    checked={localFilter.Storage.includes(storage)}
                                     onChange={() => handleStorageChange(storage)}
                                 />
                                 {storage}
@@ -131,7 +140,7 @@ function DesktopScreenFilterOption({ setFilterValue }) {
                                 <input
                                     type="checkbox"
                                     className="w-4 h-4 accent-sky-600"
-                                    checked={localFilter.Ram.includes(ram)} 
+                                    checked={localFilter.Ram.includes(ram)}
                                     onChange={() => handleRamChange(ram)}
                                 />
                                 {ram}

@@ -14,6 +14,13 @@ function Clothes({ filterValue }) {
     useEffect(() => {
         const fetchClothesData = async () => {
             const clothes = await clothDetailsService()
+
+            if (!clothes?.success) {
+                console.log("Error:", clothes?.message)
+                setClothesData([])
+                return
+            }
+
             const allClothes = clothes.data.productData
             console.log("Clothes data is: ", allClothes)
 

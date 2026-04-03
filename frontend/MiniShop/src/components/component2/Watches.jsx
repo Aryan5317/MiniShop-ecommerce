@@ -14,10 +14,16 @@ function Watches({ filterValue }) {
     useEffect(() => {
         const watchesData = async () => {
             const watches = await watchDetailsService()
+
+            if (!watches?.success) {
+                console.log("Error:", watches?.message)
+                setWatchData([])
+                return
+            }
+
             const allWatches = watches.data.productData
             console.log("Watch data is: ", allWatches)
 
-            // ✅ Guard
             if (!filterValue) {
                 setWatchData(allWatches)
                 return

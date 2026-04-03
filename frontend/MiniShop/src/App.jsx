@@ -232,7 +232,7 @@ function App() {
   useEffect(() => {
     const checkToken = async () => {
       const responseData = await handleToken()
-      if (responseData) {
+      if (responseData?.success) {
         setIsloggedIn(true)
       } else {
         setIsloggedIn(false)
@@ -244,19 +244,7 @@ function App() {
     }, 25 * 60 * 1000)
     return () => clearInterval(interval)
   }, [])
-  useEffect(() => {
-    const checkToken = async () => {
-      const responseData = await handleToken()
-      console.log("Response Data for token is: ", responseData)
-      if (responseData) {
-        setIsloggedIn(true)
-      }
-      else {
-        setIsloggedIn(false)
-      }
-    }
-    checkToken()
-  }, [])
+
 
   return (
     <>

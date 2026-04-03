@@ -46,10 +46,13 @@ const PaymentGateway = () => {
         if (selectedCategory) {
             const product = async () => {
                 const responseData = await selectedCategory();
-                console.log("Response data is: ", responseData.data.productData)
+                if (!responseData?.success) {
+                    console.log("Error:", responseData?.message)
+                    return
+                }
+
                 for (let i = 0; i < responseData.data.productData.length; i++) {
                     if (responseData.data.productData[i]._id === productId) {
-                        console.log("Product is: ", responseData.data.productData[i])
                         setProductDetails(responseData.data.productData[i]);
                     }
                 }
@@ -121,7 +124,7 @@ const PaymentGateway = () => {
                 productName: `${productDetails.watchName}`,
             }
         }
-        else if(Category === "Clothes"){
+        else if (Category === "Clothes") {
             return {
                 productName: `${productDetails.clothingName}`,
             }

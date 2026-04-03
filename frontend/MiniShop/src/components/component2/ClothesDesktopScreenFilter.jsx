@@ -23,7 +23,12 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
     useEffect(() => {
         const clothData = async () => {
             const clothesDetails = await clothDetailsService()
-            setAllClothData(clothesDetails.data.productData)
+            if (clothesDetails?.success) {
+                setAllClothData(clothesDetails.data.productData)
+            } else {
+                console.log("Error:", clothesDetails?.message)
+                setAllClothData([])
+            }
         }
         clothData()
     }, [])
@@ -40,7 +45,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         setClothingCategories(categories)
     }, [allClothData])
 
-    // ✅ Brand handler
     const handleBrandChange = (brand) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Brands.includes(brand)
@@ -53,7 +57,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Price handler
     const handlePriceChange = (e) => {
         setLocalFilter(prev => ({
             ...prev,
@@ -61,7 +64,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         }))
     }
 
-    // ✅ Category handler
     const handleCategoryChange = (cat) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Category.includes(cat)
@@ -74,7 +76,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Style handler
     const handleStyleChange = (style) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Style.includes(style)
@@ -86,8 +87,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
             }
         })
     }
-
-    // ✅ Fit handler
     const handleFitChange = (fit) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Fit.includes(fit)
@@ -100,7 +99,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Fabric handler
     const handleFabricChange = (fabric) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Fabric.includes(fabric)
@@ -113,7 +111,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Sleeve handler
     const handleSleeveChange = (sleeve) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Sleeve.includes(sleeve)
@@ -126,7 +123,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Occasion handler
     const handleOccasionChange = (occasion) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Occasion.includes(occasion)
@@ -139,17 +135,17 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Apply button — send localFilter to parent
     const handleApplyFilter = () => {
         setFilterValue(localFilter)
         console.log("Filter Applied: ", localFilter)
     }
 
+    const minPrice = priceRange.length ? Math.min(...priceRange) : 0
+    const maxPrice = priceRange.length ? Math.max(...priceRange) : 0
     return (
         <div className="border-gray-100 hidden md:flex flex-col w-[25%] shrink-0 min-h-screen">
             <div className="m-1 flex flex-col items-left justify-center px-3 pt-3 gap-3">
 
-                {/* Brands */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Brands</h3>
                     {brandsName.map((name, index) => (
@@ -170,24 +166,23 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
                     <h3 className="text-lg font-semibold">Price</h3>
                     <div className="flex items-center px-3 py-1">
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{Math.min(...priceRange)}</h3>
+                        <h3 className="text-lg font-medium">{minPrice}</h3>
                         <h3 className="px-1 text-lg font-normal">-</h3>
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{Math.max(...priceRange)}+</h3>
+                        <h3 className="text-lg font-medium">{maxPrice}+</h3>
                     </div>
                     <div className="px-3 py-1">
                         <input
                             className="w-full"
                             type="range"
-                            min={Math.min(...priceRange)}
-                            max={Math.max(...priceRange)}
-                            value={localFilter.price || Math.max(...priceRange)}
+                            min={minPrice}
+                            max={maxPrice}
+                            value={localFilter.price || maxPrice}
                             onChange={handlePriceChange}
                         />
                     </div>
                 </div>
 
-                {/* Category */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Category</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">
@@ -205,7 +200,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
                     </label>
                 </div>
 
-                {/* Style */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Style</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">
@@ -223,7 +217,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
                     </label>
                 </div>
 
-                {/* Fit */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Fit</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">
@@ -241,7 +234,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
                     </label>
                 </div>
 
-                {/* Fabric */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Fabric</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">
@@ -259,7 +251,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
                     </label>
                 </div>
 
-                {/* Sleeve */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Sleeve Type</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">
@@ -277,7 +268,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
                     </label>
                 </div>
 
-                {/* Occasion */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Occasion</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">
@@ -295,7 +285,6 @@ function ClothesDesktopScreenFilter({ setFilterValue }) {
                     </label>
                 </div>
 
-                {/* Apply Button */}
                 <div>
                     <button
                         onClick={handleApplyFilter}

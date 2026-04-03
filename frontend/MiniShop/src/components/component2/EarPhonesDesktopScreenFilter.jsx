@@ -8,7 +8,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
     const [priceRange, setPriceRange] = useState([])
     const [earphoneCategories, setEarphoneCategories] = useState([])
 
-    // ✅ localFilter — tracks selections until Apply is clicked
     const [localFilter, setLocalFilter] = useState({
         Brands: [],
         price: "",
@@ -22,7 +21,13 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
     useEffect(() => {
         const earPhoneData = async () => {
             const earPhoneDetails = await earPhoneService()
-            setAllEarPhoneData(earPhoneDetails.data.productData)
+
+            if (earPhoneDetails?.success) {
+                setAllEarPhoneData(earPhoneDetails.data.productData)
+            } else {
+                console.log("Error:", earPhoneDetails?.message)
+                setAllEarPhoneData([])
+            }
         }
         earPhoneData()
     }, [])
@@ -37,7 +42,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         setEarphoneCategories(categories)
     }, [allEarPhoneData])
 
-    // ✅ Brand handler
     const handleBrandChange = (brand) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Brands.includes(brand)
@@ -50,7 +54,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Price handler
     const handlePriceChange = (e) => {
         setLocalFilter(prev => ({
             ...prev,
@@ -58,7 +61,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         }))
     }
 
-    // ✅ Type handler
     const handleTypeChange = (type) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Type.includes(type)
@@ -71,7 +73,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Connectivity handler
     const handleConnectivityChange = (connectivity) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Connectivity.includes(connectivity)
@@ -84,7 +85,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Category handler
     const handleCategoryChange = (cat) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.Category.includes(cat)
@@ -97,7 +97,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Noise Cancellation handler
     const handleNoiseCancellationChange = (noise) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.NoiseCancellation.includes(noise)
@@ -110,7 +109,6 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Water Resistance handler
     const handleWaterResistanceChange = (water) => {
         setLocalFilter(prev => {
             const alreadySelected = prev.WaterResistance.includes(water)
@@ -123,17 +121,17 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
         })
     }
 
-    // ✅ Apply button — send localFilter to parent
     const handleApplyFilter = () => {
         setFilterValue(localFilter)
         console.log("Filter Applied: ", localFilter)
     }
+    const minPrice = priceRange.length ? Math.min(...priceRange) : 0
+    const maxPrice = priceRange.length ? Math.max(...priceRange) : 0
 
     return (
         <div className="border-gray-100 hidden md:flex flex-col w-[25%] shrink-0 min-h-screen">
             <div className="m-1 flex flex-col items-left justify-center px-3 pt-3 gap-3">
 
-                {/* Brands */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Brands</h3>
                     {brandsName.map((name, index) => (
@@ -149,29 +147,27 @@ function EarPhonesDesktopScreenFilter({ setFilterValue }) {
                     ))}
                 </div>
 
-                {/* Price */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Price</h3>
                     <div className="flex items-center px-3 py-1">
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{Math.min(...priceRange)}</h3>
+                        <h3 className="text-lg font-medium">{minPrice}</h3>
                         <h3 className="px-1 text-lg font-normal">-</h3>
                         <FaRupeeSign className="text-sm font-light" />
-                        <h3 className="text-lg font-medium">{Math.max(...priceRange)}+</h3>
+                        <h3 className="text-lg font-medium">{maxPrice}+</h3>
                     </div>
                     <div className="px-3 py-1">
                         <input
                             className="w-full"
                             type="range"
-                            min={Math.min(...priceRange)}
-                            max={Math.max(...priceRange)}
-                            value={localFilter.price || Math.max(...priceRange)}
+                            min={minPrice}
+                            max={maxPrice}
+                            value={localFilter.price || maxPrice}
                             onChange={handlePriceChange}
                         />
                     </div>
                 </div>
 
-                {/* Type */}
                 <div className="flex flex-col items-left justify-center">
                     <h3 className="text-lg font-semibold">Type</h3>
                     <label className="flex flex-col justify-center px-3 py-1 gap-2">

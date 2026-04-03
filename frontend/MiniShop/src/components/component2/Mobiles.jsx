@@ -13,10 +13,17 @@ function Mobiles({ filterValue }) {
 
     useEffect(() => {
         const phonesData = async () => {
-            const phones = await phoneDetailsService()
-            const allPhones = phones.data.productData
-            console.log("Filter value received: ", filterValue)
-            console.log("Phones data is: ", allPhones)
+            const phones = await phoneDetailsService();
+
+            if (!phones?.success) {
+                console.log("Error:", phones?.message);
+                setPhoneData([]);
+                return;
+            }
+
+            const allPhones = phones.data.productData;
+            console.log("Filter value received: ", filterValue);
+            console.log("Phones data is: ", allPhones);
 
             const noFilterApplied =
                 filterValue.Brands.length === 0 &&

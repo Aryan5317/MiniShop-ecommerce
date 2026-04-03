@@ -39,16 +39,23 @@ function CartPage() {
     const cart = async () => {
       const response = await allCartProductsService()
       console.log("Response is: ", response);
-      if (response) {
-        console.log("Response data from cart is: ", response.data.cartDetails.orders)
-        setCartProduct(response.data.cartDetails.orders)
-        let total = 0;
-        for (let i = 0; i < response.data.cartDetails.orders.length; i++) {
-          total += response.data.cartDetails.orders[i].price
-        }
-        console.log("Total:  ", total)
-        setTotalCartValue(total);
+      if (!response?.success) {
+        console.log("Error:", response?.message)
+        setCartProduct([])
+        setTotalCartValue(0)
+        return
       }
+
+      const orders = response?.data?.cartDetails?.orders || []
+
+      setCartProduct(orders)
+
+      let total = 0
+      for (let i = 0; i < orders.length; i++) {
+        total += orders[i].price
+      }
+
+      setTotalCartValue(total)
     }
     cart()
 

@@ -31,11 +31,17 @@ function SelectedShoesPage() {
   useEffect(() => {
     const shoeDetails = async () => {
       const shoe = await shoesDetailsService()
-      for (let i = 0; i < shoe.data.productData.length; i++) {
-        if (shoe.data.productData[i]._id === product) {
-          setShoeData(shoe.data.productData[i]);
-        }
+
+      if (!shoe?.success) {
+        console.log("Error:", shoe?.message)
+        return
       }
+
+      const item = shoe.data.productData.find(
+        (p) => p._id === product
+      )
+
+      if (item) setShoeData(item)
     }
     shoeDetails();
     window.scrollTo(0, 0)
