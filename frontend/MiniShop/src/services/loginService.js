@@ -7,7 +7,7 @@ async function loginService(userDetails) {
   console.log("data to send: ", dataToSend)
   try {
     const response = await fetch(
-      "http://localhost:5000/api/users/login", {
+      "https://minishop-ecommerce-o1yl.onrender.com/api/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

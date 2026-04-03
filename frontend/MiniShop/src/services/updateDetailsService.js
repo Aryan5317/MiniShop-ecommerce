@@ -9,7 +9,7 @@ const updateDetailsService = async (details) => {
     console.log("Data to send: ", dataToSend);
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/update-details",
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/update-details",
             {
                 method: "PATCH",
                 credentials: "include",

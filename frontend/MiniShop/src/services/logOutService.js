@@ -1,7 +1,7 @@
 const logOutService = async () => {
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/logOut", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/logOut", {
             method: "POST",
             credentials: "include",
             headers: {

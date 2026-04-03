@@ -8,7 +8,7 @@ const orderCompletionService = async (category, id) => {
     console.log("Data to Send: ", dataToSend);
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/cartDetails/cart-completed", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/cartDetails/cart-completed", {
             method: "PATCH",
             credentials: "include",
             headers: {

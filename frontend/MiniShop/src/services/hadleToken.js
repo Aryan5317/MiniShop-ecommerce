@@ -1,7 +1,7 @@
 async function handleToken() {
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/refresh-token", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/refresh-token", {
             method: "POST",
             credentials: "include",
             headers: {

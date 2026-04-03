@@ -6,7 +6,7 @@ const deleteLocationService = async (id) => {
     console.log("Data to send: ", id)
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/delete-location",
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/delete-location",
             {
                 method: "PATCH",
                 credentials: "include",

@@ -8,7 +8,7 @@ const addToCartService = async (id, category, flag) => {
     console.log("Data to send: ", dataToSend)
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/cartDetails/addToCart", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/cartDetails/addToCart", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"

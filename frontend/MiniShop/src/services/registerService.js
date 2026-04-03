@@ -7,7 +7,7 @@ async function registerService(userDetails) {
     console.log("Form Data is: ", dataToSend)
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/register", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

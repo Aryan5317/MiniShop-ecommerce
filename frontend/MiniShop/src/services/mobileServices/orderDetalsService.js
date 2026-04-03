@@ -11,7 +11,7 @@ const orderDetalsService = async (category, productId, productQuantity, totalAmo
     console.log("Data to Send: ", dataToSend);
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/orderDetails/order-summary", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/orderDetails/order-summary", {
             method: "POST",
             credentials: "include",
             headers: {

@@ -1,7 +1,7 @@
 const allCartProductsService = async () => {
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/cartDetails/cart-product", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/cartDetails/cart-product", {
             method: "GET",
             credentials: "include",
             headers: {

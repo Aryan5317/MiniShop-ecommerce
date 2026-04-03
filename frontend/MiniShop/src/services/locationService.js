@@ -1,7 +1,7 @@
 const locationService = async () => {
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/locations", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/locations", {
             method: "GET",
             credentials: "include",
             headers: {

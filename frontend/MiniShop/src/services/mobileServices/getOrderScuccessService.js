@@ -1,7 +1,7 @@
 const getOrderScuccessService = async () => {
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/orderDetails/order-details", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/orderDetails/order-details", {
             method: "GET",
             credentials: "include",
             headers: {

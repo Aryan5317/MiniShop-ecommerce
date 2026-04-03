@@ -25,7 +25,7 @@ const addLocationService = async (locationDetails) => {
     console.log("Data to send for location is: ", dataToSend)
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/add-location", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/add-location", {
             method: "PATCH",
             credentials: "include",
             body: JSON.stringify(dataToSend),

@@ -6,7 +6,7 @@ const activeLocationService = async (id) => {
     console.log("Data to send: ", dataToSend)
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/default-location", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/default-location", {
             method: "PATCH",
             credentials: "include",
             body: JSON.stringify(dataToSend),

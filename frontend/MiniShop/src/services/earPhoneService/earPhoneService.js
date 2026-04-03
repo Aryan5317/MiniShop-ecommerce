@@ -1,7 +1,7 @@
 const earPhoneService = async () => {
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/earPhoneDetails/earPhones-Details", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/earPhoneDetails/earPhones-Details", {
             method: "GET",
             credentials: "include",
         })

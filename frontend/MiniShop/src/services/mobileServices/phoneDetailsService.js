@@ -1,7 +1,7 @@
 async function phoneDetailsService() {
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/phoneDetails/phone-Details", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/phoneDetails/phone-Details", {
             method: "GET",
             credentials: "include",
         }

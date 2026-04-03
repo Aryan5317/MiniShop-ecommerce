@@ -7,7 +7,7 @@ async function resetPasswordService(passwordDetails) {
     try {
         console.log("Data to send is: ", dataToSend)
         const response = await fetch(
-            "http://localhost:5000/api/users/reset-password", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/reset-password", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

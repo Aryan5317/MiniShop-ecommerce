@@ -8,7 +8,7 @@ const removeFromCartService = async (id, flag) => {
     console.log("Data to send for cart remove is: ", dataToSend);
     try {
         const response = await fetch(
-            "http://localhost:5000/api/users/cartDetails/remove-cartPorduct", {
+            "https://minishop-ecommerce-o1yl.onrender.com/api/users/cartDetails/remove-cartPorduct", {
             credentials: "include",
             method: "PATCH",
             body: JSON.stringify(dataToSend),
