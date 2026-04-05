@@ -320,7 +320,8 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
         const options = {
             httpOnly: true,
             secure: true,
-            sameSite: "none"
+            sameSite: "None",
+            path: "/"
         }
 
         return res.status(200)
@@ -430,7 +431,8 @@ const logoutUser = asyncHandler(async (req, res, next) => {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite: "none"
+        sameSite: "None",
+        path: "/"
     }
     return res.status(200)
         .clearCookie("accessToken", options)
