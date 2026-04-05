@@ -13,14 +13,9 @@ function Bags({ filterValue }) {
 
     useEffect(() => {
         const bagsData = async () => {
-            const bags = await bagDetailsService();
-            if (!bags?.success) {
-                console.log("Error:", bags?.message);
-                setBagData([]);
-                return;
-            }
-            const allBags = bags.data.productData;
-            console.log("Bags data is: ", allBags);
+            const bags = await bagDetailsService()
+            const allBags = bags.data.productData
+            console.log("Bags data is: ", allBags)
 
             const noFilterApplied =
                 filterValue.Brands.length === 0 &&

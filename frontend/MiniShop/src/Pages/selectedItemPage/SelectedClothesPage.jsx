@@ -31,12 +31,6 @@ function SelectedClothesPage() {
     useEffect(() => {
         const clothDetails = async () => {
             const cloth = await clothDetailsService()
-
-            if (!cloth?.success) {
-                console.log("Error:", cloth?.message)
-                return
-            }
-
             for (let i = 0; i < cloth.data.productData.length; i++) {
                 if (cloth.data.productData[i]._id === product) {
                     setClothData(cloth.data.productData[i]);
@@ -50,7 +44,7 @@ function SelectedClothesPage() {
     useEffect(() => {
         const cart = async () => {
             const response = await allCartProductsService()
-            if (response?.success) {
+            if (response) {
                 for (let i = 0; i < response.data.cartDetails.orders.length; i++) {
                     if (response.data.cartDetails.orders[i].productID === product) {
                         setCartValue(true)
@@ -64,10 +58,10 @@ function SelectedClothesPage() {
     useEffect(() => {
         const locationData = async () => {
             const response = await locationService()
-            if (response?.success) {
+            if (response) {
                 setLocationName(response.data.fullname)
             }
-            if (!(response?.data?.defaultLocation)) {
+            if (!(response.data.defaultLocation)) {
                 setLocationFlag(false)
             } else {
                 setLocationFlag(true)

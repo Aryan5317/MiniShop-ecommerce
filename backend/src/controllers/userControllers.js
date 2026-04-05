@@ -127,9 +127,9 @@ const loginUser = asyncHandler(async (req, res, next) => {
     const loggedInUser = await User.findById(userId)
         .select("-password -refreshToken")
     const options = {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
+        httpOnly: true, // it makes only accessible by server not by client(browser)
+        secure: true, // for localhost always false and after deploy use true here
+        sameSite: "none",
         path: "/"
     }
     return res.status(200)
@@ -297,7 +297,7 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
     console.log("New refresh Token is: ", incomingRefreshToken)
     if (!incomingRefreshToken) {
-        throw new ApiError(401, "Unauthorized User")
+        throw new ApiError(404, "Unauthorized User")
     }
     try {
         const decodedToken = jwt.verify(
@@ -320,8 +320,7 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
         const options = {
             httpOnly: true,
             secure: true,
-            sameSite: "None",
-            path: "/"
+            sameSite: "none"
         }
 
         return res.status(200)
@@ -431,10 +430,8 @@ const logoutUser = asyncHandler(async (req, res, next) => {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite: "None",
-        path: "/"
+        sameSite: "none"
     }
-
     return res.status(200)
         .clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)

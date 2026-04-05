@@ -30,11 +30,7 @@ function SelectedMobilePage() {
   useEffect(() => {
     const phoneDetails = async () => {
       const phone = await phoneDetailsService()
-
-      if (!phone?.success) {
-        console.log("Error:", phone?.message)
-        return
-      } for (let i = 0; i < phone.data.productData.length; i++) {
+      for (let i = 0; i < phone.data.productData.length; i++) {
         if (phone.data.productData[i]._id === product) {
           setPhoneData(phone.data.productData[i]);
         }
@@ -47,7 +43,7 @@ function SelectedMobilePage() {
   useEffect(() => {
     const cart = async () => {
       const response = await allCartProductsService()
-      if (response?.success) {
+      if (response) {
         for (let i = 0; i < response.data.cartDetails.orders.length; i++) {
           if (response.data.cartDetails.orders[i].productID === product) {
             setCartValue(true)
@@ -61,7 +57,7 @@ function SelectedMobilePage() {
   useEffect(() => {
     const locationData = async () => {
       const response = await locationService()
-      if (response?.success) {
+      if (response) {
         setLocationName(response.data.fullname)
       }
       if (!(response.data.defaultLocation)) {

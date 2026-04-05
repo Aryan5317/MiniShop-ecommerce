@@ -15,7 +15,7 @@ async function handleToken() {
             console.log("Error from backend is: ", data.message || "Authentication Failed")
             throw new Error(data.message || "Authentication Failed")
         }
-        return data
+        return data.message
     }
     catch (err) {
         console.log("Error from backend is: ", err || "Authentication Failed")

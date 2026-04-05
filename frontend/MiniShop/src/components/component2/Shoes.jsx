@@ -14,13 +14,6 @@ function Shoes({ filterValue }) {
     useEffect(() => {
         const fetchShoesData = async () => {
             const shoes = await shoesDetailsService()
-
-            if (!shoes?.success) {
-                console.log("Error:", shoes?.message)
-                setShoesData([])
-                return
-            }
-
             const allShoes = shoes.data.productData
             console.log("Shoes data is: ", allShoes)
 

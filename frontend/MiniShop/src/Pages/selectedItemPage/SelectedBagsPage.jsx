@@ -30,14 +30,12 @@ function SelectedBagPage() {
     useEffect(() => {
         const bagDetails = async () => {
             const bag = await bagDetailsService()
-
-            if (!bag?.success) {
-                console.log("Error:", bag?.message)
-                return
-            }
-
+            console.log("Full API response: ", bag)           // 👈 check structure
+            console.log("product param: ", product)           // 👈 check the id
+            console.log("First item _id: ", bag.data.productData?.[0]?._id)  // 👈 compare types
             for (let i = 0; i < bag.data.productData.length; i++) {
                 if (bag.data.productData[i]._id.toString() === product.toString()) {
+                    console.log("Match found: ", bag.data.productData[i])
                     setBagData(bag.data.productData[i]);
                 }
             }
@@ -49,7 +47,7 @@ function SelectedBagPage() {
     useEffect(() => {
         const cart = async () => {
             const response = await allCartProductsService()
-            if (response?.success) {
+            if (response) {
                 for (let i = 0; i < response.data.cartDetails.orders.length; i++) {
                     if (response.data.cartDetails.orders[i].productID === product) {
                         setCartValue(true)
@@ -63,10 +61,10 @@ function SelectedBagPage() {
     useEffect(() => {
         const locationData = async () => {
             const response = await locationService()
-            if (response?.success) {
+            if (response) {
                 setLocationName(response.data.fullname)
             }
-            if (!(response?.data?.defaultLocation)) {
+            if (!(response.data.defaultLocation)) {
                 setLocationFlag(false)
             } else {
                 setLocationFlag(true)
@@ -83,7 +81,7 @@ function SelectedBagPage() {
     const addToCart = (id, c) => {
         const cart = async () => {
             const responseCart = await addToCartService(id, c, true)
-            if (responseCart?.success) {
+            if (responseCart) {
                 setCartMessage(responseCart);
                 setPopup(true)
                 setTimeout(() => {

@@ -31,14 +31,9 @@ function SelectedWatchPage() {
     useEffect(() => {
         const watchDetails = async () => {
             const watch = await watchDetailsService()
-
-            if (!watch?.success) {
-                console.log("Error:", watch?.message)
-                return
-            }
-
             for (let i = 0; i < watch.data.productData.length; i++) {
                 if (watch.data.productData[i]._id === product) {
+                    console.log("True")
                     setWatchData(watch.data.productData[i]);
                 }
             }
@@ -64,7 +59,7 @@ function SelectedWatchPage() {
     useEffect(() => {
         const locationData = async () => {
             const response = await locationService()
-            if (response?.success) {
+            if (response) {
                 setLocationName(response.data.fullname)
             }
             if (!(response.data.defaultLocation)) {
@@ -84,7 +79,7 @@ function SelectedWatchPage() {
     const addToCart = (id, c) => {
         const cart = async () => {
             const responseCart = await addToCartService(id, c, true)
-            if (responseCart?.success) {
+            if (responseCart) {
                 setCartMessage(responseCart);
                 setPopup(true)
                 setTimeout(() => {

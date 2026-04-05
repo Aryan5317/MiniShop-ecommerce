@@ -31,12 +31,6 @@ function SelectedEarPhonePage() {
     useEffect(() => {
         const earPhoneDetails = async () => {
             const earPhone = await earPhoneService()
-
-            if (!earPhone?.success) {
-                console.log("Error:", earPhone?.message)
-                return
-            }
-
             for (let i = 0; i < earPhone.data.productData.length; i++) {
                 if (earPhone.data.productData[i]._id === product) {
                     setEarPhoneData(earPhone.data.productData[i]);
@@ -50,7 +44,7 @@ function SelectedEarPhonePage() {
     useEffect(() => {
         const cart = async () => {
             const response = await allCartProductsService()
-            if (response?.success) {
+            if (response) {
                 for (let i = 0; i < response.data.cartDetails.orders.length; i++) {
                     if (response.data.cartDetails.orders[i].productID === product) {
                         setCartValue(true)
@@ -64,7 +58,7 @@ function SelectedEarPhonePage() {
     useEffect(() => {
         const locationData = async () => {
             const response = await locationService()
-            if (response?.success) {
+            if (response) {
                 setLocationName(response.data.fullname)
             }
             if (!(response.data.defaultLocation)) {
@@ -84,7 +78,7 @@ function SelectedEarPhonePage() {
     const addToCart = (id, c) => {
         const cart = async () => {
             const responseCart = await addToCartService(id, c, true)
-            if (responseCart?.success) {
+            if (responseCart) {
                 setCartMessage(responseCart);
                 setPopup(true)
                 setTimeout(() => {
