@@ -12,7 +12,8 @@ const deleteLocationService = async (id) => {
                 credentials: "include",
                 body: JSON.stringify(dataToSend),
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
                 },
             }
         )

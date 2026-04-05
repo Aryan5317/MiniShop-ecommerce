@@ -11,7 +11,8 @@ const activeLocationService = async (id) => {
             credentials: "include",
             body: JSON.stringify(dataToSend),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
             },
         })
         const data = await response.json()
@@ -25,7 +26,6 @@ const activeLocationService = async (id) => {
         console.log("Error while setting default location: ", error)
         throw error
     }
-
 }
 
 export default activeLocationService

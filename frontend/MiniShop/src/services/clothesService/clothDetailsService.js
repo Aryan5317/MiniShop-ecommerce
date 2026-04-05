@@ -4,6 +4,10 @@ const clothDetailsService = async () => {
       "https://minishop-ecommerce-o1yl.onrender.com/api/users/clothesDetails/clothes-Details", {
       method: "GET",
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
+      },
     })
     console.log("Response from Clothes data is: ", response)
     const data = await response.json()

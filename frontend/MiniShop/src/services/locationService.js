@@ -5,7 +5,8 @@ const locationService = async () => {
             method: "GET",
             credentials: "include",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
             },
         })
         const data = await response.json()

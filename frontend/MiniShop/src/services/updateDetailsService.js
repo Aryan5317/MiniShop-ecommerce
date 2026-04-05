@@ -2,7 +2,7 @@ const updateDetailsService = async (details) => {
     console.log("Details are: ", details)
     
     const dataToSend = {}
-        if(details.userName) dataToSend.name = details.userName
+    if(details.userName) dataToSend.name = details.userName
     if(details.newPassword) dataToSend.newPassword = details.newPassword
     if(details.confirmPassword) dataToSend.confirmPassword = details.confirmPassword
 
@@ -15,7 +15,8 @@ const updateDetailsService = async (details) => {
                 credentials: "include",
                 body: JSON.stringify(dataToSend),
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
                 }
             })
         console.log("Response is: ", response)

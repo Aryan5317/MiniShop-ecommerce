@@ -12,7 +12,8 @@ const orderCompletionService = async (category, id) => {
             method: "PATCH",
             credentials: "include",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
             },
             body: JSON.stringify(dataToSend)
         })

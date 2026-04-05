@@ -5,7 +5,8 @@ const logOutService = async () => {
             method: "POST",
             credentials: "include",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
             },
         })
         const data = await response.json()
@@ -14,6 +15,10 @@ const logOutService = async () => {
             console.log("Error from backend controller is: ", data.message || data)
             throw new Error(data.message || data)
         }
+
+        // ✅ Clear sessionStorage on logout
+        sessionStorage.removeItem("accessToken")
+        
         return data.message;
     } catch (error) {
         console.log("Error from backend in logout: ", error)

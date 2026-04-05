@@ -11,7 +11,8 @@ const addToCartService = async (id, category, flag) => {
             "https://minishop-ecommerce-o1yl.onrender.com/api/users/cartDetails/addToCart", {
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
             },
             credentials: "include",
             body: JSON.stringify(dataToSend),

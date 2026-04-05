@@ -21,6 +21,13 @@ async function loginService(userDetails) {
       console.log("Login failed: ", data.message || data)
       throw new Error(data.message || "Authentication Failed")
     }
+
+    // ✅ Save token in sessionStorage after successful login
+    if (data.data?.accessToken) {
+      sessionStorage.setItem("accessToken", data.data.accessToken)
+      console.log("Access token saved in sessionStorage")
+    }
+
     return data.message
   }
   catch (err) {

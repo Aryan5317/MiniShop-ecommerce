@@ -1,5 +1,5 @@
 const orderDetalsService = async (category, productId, productQuantity, totalAmount) => {
-    console.log("Product id in service code: ",productId)
+    console.log("Product id in service code: ", productId)
     console.log("Product Quantity in service code: ", productQuantity)
     console.log("Total Amount in amount code is: ", totalAmount)
     const dataToSend = {
@@ -15,7 +15,9 @@ const orderDetalsService = async (category, productId, productQuantity, totalAmo
             method: "POST",
             credentials: "include",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` 
+
             },
             body: JSON.stringify(dataToSend)
         })
