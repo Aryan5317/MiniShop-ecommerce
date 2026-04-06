@@ -12,6 +12,7 @@ function ResetPasswordPage() {
   const [confirmPasswordEye, setConfirmpasswordEye] = useState(false)
   const [errors, setErrors] = useState({})
   const [formMessage, setFormMessage] = useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const SetPassword = (e) => {
@@ -37,6 +38,7 @@ function ResetPasswordPage() {
   }
 
   const updateChangePassword = async () => {
+    setLoading(true)
     const validationError = await resetPassword(newPassword)
     console.log("Validation Error: ", validationError)
     setErrors(validationError)
@@ -59,6 +61,9 @@ function ResetPasswordPage() {
           ...prev,
           message: err.message
         }))
+      }
+      finally {
+        setLoading(false);
       }
     }
     else {
@@ -120,8 +125,10 @@ function ResetPasswordPage() {
           {(errors.confirmPassword) && <p className="text-sm text-yellow-300 px-3 ">{errors.confirmPassword}</p>}
           <button
             onClick={() => updateChangePassword()}
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 mt-3 rounded-xl shadow-lg hover:scale-105 transition-all duration-200">
-            Update Password
+            disabled={loading}
+            className={`w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg 
+              ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`}>
+            {loading ? "Verifying..." : "Verify"}
           </button>
           {formMessage && <p className="text-md px-3 bg-green-800 rounded-md m-1 text-white flex items-center justify-center">Password Reset Successfully</p>}
         </div>
@@ -171,8 +178,10 @@ function ResetPasswordPage() {
           {(errors.confirmPassword) && <p className="text-sm text-yellow-300 px-3 ">{errors.confirmPassword}</p>}
           <button
             onClick={() => updateChangePassword()}
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 mt-3 rounded-xl shadow-lg hover:scale-105 transition-all duration-200">
-            Update Password
+            disabled={loading}
+            className={`w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg 
+              ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`}>
+            {loading ? "Verifying..." : "Verify"}
           </button>
           {formMessage && <p className="text-md px-3 bg-green-800 rounded-md m-1 text-white flex items-center justify-center">Password Reset Successfully</p>}
         </div>

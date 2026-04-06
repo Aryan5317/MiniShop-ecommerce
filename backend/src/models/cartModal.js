@@ -28,7 +28,7 @@ const cartValue = new Schema({
                 type: Number,
                 required: true,
             },
-            phoneImages: {
+            productImages: {
                 type: [String],
                 default: [],
             },

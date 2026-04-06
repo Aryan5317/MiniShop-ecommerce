@@ -183,7 +183,6 @@ function OrderSuccessPage() {
               </div>
             </div>
           </div>
-
           <div className="flex items-center justify-center mb-6">
             <button
               className="px-8 py-3 font-semibold text-xl bg-green-500 text-white rounded-xl shadow-md hover:bg-green-600 transition duration-300 cursor-pointer"

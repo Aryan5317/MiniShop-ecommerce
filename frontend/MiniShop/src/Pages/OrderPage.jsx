@@ -49,7 +49,7 @@ function OrderPage() {
               >
                 <div className="w-20 h-20 flex-shrink-0 flex items-center justify-center bg-white border rounded-lg">
                   <img
-                    src={order.phoneImages?.[0]}
+                    src={order.productImages?.[0]}
                     alt=""
                     className="w-full h-full object-contain rounded-md"
                   />
@@ -94,7 +94,7 @@ function OrderPage() {
               >
                 <div className="w-32 h-32 flex-shrink-0 flex items-center justify-center bg-gray-50 border rounded-xl">
                   <img
-                    src={order.phoneImages?.[0]}
+                    src={order.productImages?.[0]}
                     alt=""
                     className="w-full h-full object-contain rounded-xl p-2"
                   />

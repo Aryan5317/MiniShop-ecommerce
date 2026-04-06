@@ -11,6 +11,7 @@ function ForgetPasswordPage() {
   const [verifyEmail, setVerifyEmail] = useState(false)
   const [error, setError] = useState({})
   const [otpVerificationMessage, SetotpVerificationMessage] = useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const SetUserEmail = (e) => {
@@ -55,6 +56,7 @@ function ForgetPasswordPage() {
   }
 
   const verifyOtpDetails = async () => {
+    setLoading(true)
     console.log("Otp is: ", forgetDetails.otp)
     if (!forgetDetails.otp) {
       setError((prev) => ({
@@ -85,7 +87,9 @@ function ForgetPasswordPage() {
           message: err.message
         }))
         SetotpVerificationMessage(false)
-
+      }
+      finally {
+        setLoading(false)
       }
     }
   }
@@ -119,7 +123,7 @@ function ForgetPasswordPage() {
           {(error.email) && <p className="text-sm text-yellow-300 px-3">{error.email}</p>}
           {!verifyEmail && (<button
             onClick={() => verifyEmailDetails()}
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 mt-3 rounded-xl shadow-lg hover:scale-105 transition-all duration-200">
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-200">
             Verify Email
           </button>)}
           {(error.message) && (
@@ -144,8 +148,10 @@ function ForgetPasswordPage() {
               </div>
               <button
                 onClick={() => verifyOtpDetails()}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-200">
-                Verify OTP
+                disabled={loading}
+                className={`w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg 
+              ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`}>
+                {loading ? "Verifying..." : "Verify OTP"}
               </button>
               {(error.otp) && (
                 <p className="text-md px-3 bg-red-600 rounded-md m-1 text-white flex justify-center items-center">
@@ -212,8 +218,10 @@ function ForgetPasswordPage() {
 
               <button
                 onClick={() => verifyOtpDetails()}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-200">
-                Verify OTP
+                disabled={loading}
+                className={`w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg 
+              ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`}>
+                {loading ? "Verifying..." : "Verify OTP"}
               </button>
               {(error.otp) && (
                 <p className="text-md px-3 bg-red-600 rounded-md m-1 text-white flex justify-center items-center">

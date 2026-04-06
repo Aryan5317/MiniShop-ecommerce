@@ -14,6 +14,7 @@ function LoginPage() {
   const [passwordEye, setPasswordEye] = useState(false)
   const [error, setError] = useState({})
   const [formMessage, setFormMessage] = useState(null)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const SetUserEmail = (e) => {
@@ -41,6 +42,7 @@ function LoginPage() {
   }
 
   const verifyUserDetails = async () => {
+    setLoading(true)
     const loginValidationError = loginValidation(userDetails)
     setError(loginValidationError)
     if (Object.keys(loginValidationError).length === 0) {
@@ -64,6 +66,9 @@ function LoginPage() {
           ...prev,
           message: err.message
         }))
+      }
+      finally {
+        setLoading(false)
       }
     }
     else {
@@ -128,10 +133,11 @@ function LoginPage() {
 
             <button
               onClick={() => verifyUserDetails()}
-              className="w-full mt-6 bg-sky-600 hover:bg-sky-700 
+              disabled={loading}
+              className={`w-full mt-6 bg-sky-600 hover:bg-sky-700 
                        text-white text-lg font-semibold py-3 rounded-xl 
-                       transition duration-300 shadow-lg">
-              Login
+              ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`}>
+              {loading ? "Login..." : "Login"}
             </button>
             {(formMessage) ? <p className="text-md px-3 bg-green-800 rounded-md m-1 text-white flex items-center justify-center">Login Successfully</p> : ""}
             {(error.message) && (
@@ -205,8 +211,10 @@ function LoginPage() {
             </div>
             <button
               onClick={() => verifyUserDetails()}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-200">
-              Login
+              disabled={loading}
+              className={`w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-2 rounded-xl shadow-lg 
+              ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`}>
+              {loading ? "Login..." : "Login"}
             </button>
             {(formMessage) ? <p className="text-md px-3 bg-green-800 rounded-md m-1 text-white flex items-center justify-center">Login Successfully</p> : ""}
             {(error.message) && (
@@ -225,7 +233,7 @@ function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

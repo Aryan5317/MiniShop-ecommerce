@@ -27,6 +27,8 @@ function SelectedWatchPage() {
     const [locationFlag, setLocationFlag] = useState(false)
     const [locationMessageFlag, setLocationMessageFlag] = useState(false)
     const [buyClicked, setBuyClicked] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [loading2, setLoading2] = useState(false)
 
     useEffect(() => {
         const watchDetails = async () => {
@@ -77,12 +79,14 @@ function SelectedWatchPage() {
     }, [])
 
     const addToCart = (id, c) => {
+        setLoading2(true)
         const cart = async () => {
             const responseCart = await addToCartService(id, c, true)
             if (responseCart) {
                 setCartMessage(responseCart);
                 setPopup(true)
                 setTimeout(() => {
+                    setLoading2(false)
                     setPopup(false)
                 }, 5000)
             } else {
@@ -97,10 +101,12 @@ function SelectedWatchPage() {
     }
 
     const paymentButton = () => {
+        setLoading(true)
         setBuyClicked(true)
         if (locationFlag) {
             setLocationMessageFlag(true)
             setTimeout(() => {
+                setLoading(false)
                 navigate(`/product/${product}/orderSummary?quantity=${itemQuantity}&category=Watches`)
             }, 2000)
         } else {
@@ -123,12 +129,9 @@ function SelectedWatchPage() {
                 </div>
             )}
 
-            {/* ── DESKTOP ── */}
             <div className="hidden md:flex flex-col">
                 {popup && <AddToCart cartMessage={cartMessage} />}
                 <div className="border hidden md:flex flex-row m-3 mt-1 bg-white">
-
-                    {/* Watch Image */}
                     <div className="h-[50vh] lg:h-[100vh] w-[35%] lg:w-[40%] flex items-center justify-center">
                         <img
                             src={watchData.watchImages?.[0]}
@@ -138,13 +141,9 @@ function SelectedWatchPage() {
                     </div>
 
                     <div className="mx-3 pt-3 w-[55%] flex flex-col">
-
-                        {/* Watch Name + Specs */}
                         <p className="flex font-medium text-xl">
                             {watchData.watchName} ({watchData.color}) | {watchData.category} | {watchData.dialSize}mm | {watchData.strapMaterial} | {watchData.description?.highlights}
                         </p>
-
-                        {/* Ratings */}
                         <div className="flex items-center gap-1 mt-3">
                             <h3 className="font-medium text-lg">0.0</h3>
                             <div className="flex">
@@ -159,16 +158,12 @@ function SelectedWatchPage() {
                                 <h3 className="font-medium text-lg text-sky-600">(0)</h3>
                             </div>
                         </div>
-
-                        {/* Total Sell */}
                         <div className="flex mt-3 gap-1">
                             <h3 className="font-bold text-md">{watchData.totalSell}+ bought</h3>
                             <h3 className="text-md">in past month</h3>
                         </div>
 
                         <div className="border-gray-300 border mt-3"></div>
-
-                        {/* Price */}
                         <div className="mt-5 m-3 mb-0 flex flex-row gap-3">
                             <h3 className="font-medium text-2xl text-red-400">-{watchData.discount}%</h3>
                             <div className="flex">
@@ -182,8 +177,6 @@ function SelectedWatchPage() {
                             <h3 className="text-gray-300 px-3">|</h3>
                             <h3 className="text-sky-600">Price history</h3>
                         </div>
-
-                        {/* Trust Badges */}
                         <div className="flex gap-3 overflow-y-auto">
                             <div className="gap-1 flex flex-col items-center w-[20%]">
                                 <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
@@ -221,8 +214,6 @@ function SelectedWatchPage() {
                         </div>
 
                         <div className="border-gray-300 border mt-3"></div>
-
-                        {/* Location */}
                         <div className="flex flex-row m-3 mt-1 items-center gap-2 min-w-0 cursor-pointer" onClick={() => openLocationPage()}>
                             <FiMapPin className="text-lg self-start mt-1" />
                             <p className="text-lg text-sky-600 font-semibold">
@@ -230,8 +221,6 @@ function SelectedWatchPage() {
                             </p>
                             <p className="text-lg text-black font-semibold">- Update Location</p>
                         </div>
-
-                        {/* Quantity + Buttons */}
                         <div className="flex flex-col gap-3 mt-3 mx-3">
                             <div className="flex border mt-1 px-3 py-1 w-[40%] gap-1 rounded-lg bg-gray-100 hover:bg-gray-200 transition duration-300">
                                 <h3 className="text-lg font-medium">Quantity: </h3>
@@ -243,16 +232,16 @@ function SelectedWatchPage() {
                             </div>
                             <div className="flex border px-3 py-2 w-[40%] gap-1 rounded-3xl bg-yellow-400 items-center justify-center hover:bg-yellow-500 transition duration-300">
                                 {!cartValue
-                                    ? <button className="text-lg" onClick={() => addToCart(watchData._id, watchData.productCategory)}>Add to cart</button>
+                                    ? <button className={`text-lg ${loading2 ? " opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`} onClick={() => addToCart(watchData._id, watchData.productCategory)}>{loading2 ? "Add to cart" : "Add to Cart"}</button>
                                     : <button className="text-lg" onClick={() => CartPage()}>Go to cart</button>
                                 }
                             </div>
                             <div className="flex border px-3 py-2 mb-3 w-[40%] gap-1 rounded-3xl bg-amber-500 items-center justify-center hover:bg-orange-500 transition duration-300">
-                                <button className="text-lg" onClick={() => paymentButton()}>Buy now</button>
+                                <button className={`text-lg ${loading ? " opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`} onClick={() => paymentButton()}>
+                                    {loading ? "Buying..." : "Buy Now"}
+                                </button>
                             </div>
                         </div>
-
-                        {/* About this item — watch schema fields only */}
                         <div className="mt-3 flex flex-col">
                             <h3 className="text-xl font-bold">About this item</h3>
                             <ul className="list-disc pl-4">
@@ -272,11 +261,12 @@ function SelectedWatchPage() {
                 <div>
                     <ExploreWatchProduct />
                 </div>
-            </div>
+            </div >
 
             {/* ── MOBILE ── */}
-            <div className="border flex flex-col md:hidden">
-                {popup && <AddToCart cartMessage={cartMessage} />}
+            < div className="border flex flex-col md:hidden" >
+                {popup && <AddToCart cartMessage={cartMessage} />
+                }
 
                 {/* Watch Image */}
                 <div className="flex items-center justify-center m-3 mt-1 py-3">
@@ -324,16 +314,17 @@ function SelectedWatchPage() {
                     </div>
                     <div className="flex border px-3 py-3 gap-1 rounded-xl bg-yellow-400 items-center justify-center hover:bg-yellow-500 transition duration-300 w-full">
                         {!cartValue
-                            ? <button className="text-lg" onClick={() => addToCart(watchData._id, watchData.productCategory)}>Add to cart</button>
+                            ? <button className={`text-lg ${loading ? " opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`} onClick={() => addToCart(watchData._id, watchData.productCategory)}>{loading2? "Add to cart.":  "Add to cart"}</button>
                             : <button className="text-lg" onClick={() => CartPage()}>Go to cart</button>
                         }
                     </div>
                     <div className="flex border px-3 py-3 mb-3 gap-1 rounded-xl bg-amber-500 items-center justify-center hover:bg-orange-500 transition duration-300 w-full">
-                        <button className="text-lg" onClick={() => paymentButton()}>Buy now</button>
+                        <button className={`text-lg ${loading ? " opacity-50 cursor-not-allowed" : "hover:bg-sky-700 cursor-pointer"}`} onClick={() => paymentButton()}>
+                            {loading ? "Buying..." : "Buy Now"}
+                        </button>
                     </div>
                 </div>
 
-                {/* Seller Info */}
                 <div className="flex m-3 mt-1 gap-3 items-center justify-between w-[60%]">
                     <div className="flex flex-col text-md">
                         <h3>Shop From</h3>
@@ -347,7 +338,6 @@ function SelectedWatchPage() {
 
                 <div className="border-gray-600 border"></div>
 
-                {/* Shop with confidence */}
                 <div className="flex flex-col m-3">
                     <h3 className="font-semibold text-xl">Shop with confidence</h3>
                     <div className="mt-3 flex flex-col">
@@ -395,7 +385,7 @@ function SelectedWatchPage() {
                     <ExploreWatchProduct />
                 </div>
                 <PhoneOptions />
-            </div>
+            </div >
         </>
     )
 }

@@ -54,6 +54,21 @@ const registerUser = asyncHandler(async (req, res, next) => {
     }
     console.log("Fullname is: ", fullname)
 
+
+    const existUser = await User.findOne({
+        $or: [{ fullname: fullname }, { email: email.toLowerCase() }]
+    })
+    if (existUser) {
+        throw new ApiError(400, "*User Already Exist")
+    }
+    const newUser = await User.create({
+        fullname,
+        email: email.toLowerCase(),
+        password: password
+
+    })
+    console.log("User created:", newUser)
+
     try {
         let checkEmail = email;
         const verifyUserEmail = await sendEmail({
@@ -75,23 +90,8 @@ Team MiniShop`
     }
     catch (err) {
         console.log("Error while verifying email: ", err)
-        throw new ApiError(404, "*Email id does not exist")
+        // throw new ApiError(404, "*Email id does not exist")
     }
-
-    const existUser = await User.findOne({
-        $or: [{ fullname: fullname }, { email: email.toLowerCase() }]
-    })
-    if (existUser) {
-        throw new ApiError(400, "*User Already Exist")
-    }
-    const newUser = await User.create({
-        fullname,
-        email: email.toLowerCase(),
-        password: password
-
-    })
-    console.log("User created:", newUser)
-
     const userCreated = await User.findById(newUser._id)
         .select("-password")
     if (!userCreated) {

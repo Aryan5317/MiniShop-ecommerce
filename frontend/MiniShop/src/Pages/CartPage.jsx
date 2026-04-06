@@ -133,7 +133,7 @@ function CartPage() {
               {cartProduct.map((cart) => (
                 <div key={cart._id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex gap-3 cursor-pointer"   >
                   <div className="w-24 h-24 shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <img src={cart.phoneImages?.[0]} alt="Error 404" className="w-full h-full object-contain rounded-lg p-1" />
+                    <img src={cart.productImages?.[0]} alt="Error 404" className="w-full h-full object-contain rounded-lg p-1" />
                   </div>
                   <div className="flex flex-col flex-1 gap-1" onClick={() => navigateProductPage(cart.productCategory, cart.productID)}>
                     <h3 className="font-semibold text-md line-clamp-2 text-gray-800">{cart.productName}</h3>
@@ -203,7 +203,7 @@ function CartPage() {
                   {cartProduct.map((cart) => (
                     <div key={cart._id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex gap-6 cursor-pointer" onClick={() => navigateProductPage(cart.productCategory, cart.productID)}>
                       <div className="w-36 h-36 shrink-0 bg-gray-100 rounded-xl flex items-center justify-center">
-                        <img src={cart.phoneImages?.[0]} alt="Error 404" className="w-full h-full object-contain rounded-xl p-2" />
+                        <img src={cart.productImages?.[0]} alt="Error 404" className="w-full h-full object-contain rounded-xl p-2" />
                       </div>
                       <div className="flex flex-col flex-1 gap-2">
                         <h3 className="font-semibold text-xl line-clamp-2 text-gray-800">{cart.productName}</h3>

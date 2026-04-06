@@ -6,7 +6,7 @@ const getOrderScuccessService = async () => {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
+                "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` 
             },
         })
         const data = await response.json()
