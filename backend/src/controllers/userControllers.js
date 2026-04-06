@@ -69,29 +69,29 @@ const registerUser = asyncHandler(async (req, res, next) => {
     })
     console.log("User created:", newUser)
 
-    try {
-        let checkEmail = email;
-        const verifyUserEmail = await sendEmail({
-            to: checkEmail,
-            subject: "Welcome to MiniShop 🎉 Your Account is Ready",
-            text: `Hi
+//     try {
+//         let checkEmail = email;
+//         const verifyUserEmail = await sendEmail({
+//             to: checkEmail,
+//             subject: "Welcome to MiniShop 🎉 Your Account is Ready",
+//             text: `Hi
 
-Welcome to MiniShop! 🎉
+// Welcome to MiniShop! 🎉
 
-Your account has been successfully created. You can now browse products, add items to your cart, and start shopping with us.
+// Your account has been successfully created. You can now browse products, add items to your cart, and start shopping with us.
 
-If you did not create this account, please contact our support team immediately.
-📧 Email: aryandesu69@gmail.com
-📞 Phone: +91 98765 43210
-Happy Shopping! 🛍️
-Team MiniShop`
-        })
-        console.log("Email send succesfully", verifyUserEmail)
-    }
-    catch (err) {
-        console.log("Error while verifying email: ", err)
-        // throw new ApiError(404, "*Email id does not exist")
-    }
+// If you did not create this account, please contact our support team immediately.
+// 📧 Email: aryandesu69@gmail.com
+// 📞 Phone: +91 98765 43210
+// Happy Shopping! 🛍️
+// Team MiniShop`
+//         })
+//         console.log("Email send succesfully", verifyUserEmail)
+//     }
+//     catch (err) {
+//         console.log("Error while verifying email: ", err)
+//         // throw new ApiError(404, "*Email id does not exist")
+//     }
     const userCreated = await User.findById(newUser._id)
         .select("-password")
     if (!userCreated) {
