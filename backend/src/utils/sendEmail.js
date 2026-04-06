@@ -2,17 +2,19 @@ import nodemailer from "nodemailer";
 import ApiError from "./errorHandler.js";
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "74.125.24.108",
     port: 587,
     secure: false, // TLS
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
-    family: 4, // 🔥 FORCE IPv4 (THIS FIXES YOUR ERROR)
     connectionTimeout: 10000,
     greetingTimeout: 10000,
-    socketTimeout: 10000
+    socketTimeout: 10000,
+    tls: {
+        rejectUnauthorized: false
+    }
 });
 export const sendEmail = async (options) => {
     if (!options || !options.to) {
@@ -24,7 +26,7 @@ export const sendEmail = async (options) => {
             to: options.to,
             subject: options.subject || "MiniShop Notification",
             text: options.text || "",
-            html: options.html || null 
+            html: options.html || null
         });
         console.log("✅ Email sent:", info.messageId);
         return {
