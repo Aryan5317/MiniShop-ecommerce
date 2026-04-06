@@ -2,14 +2,17 @@ import nodemailer from "nodemailer";
 import ApiError from "./errorHandler.js";
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // TLS
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        pass: process.env.EMAIL_PASS,
     },
-    connectionTimeout: 5000,  
-    greetingTimeout: 5000,
-    socketTimeout: 5000
+    family: 4, // 🔥 FORCE IPv4 (THIS FIXES YOUR ERROR)
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000
 });
 export const sendEmail = async (options) => {
     if (!options || !options.to) {
