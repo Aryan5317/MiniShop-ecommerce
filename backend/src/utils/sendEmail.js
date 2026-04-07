@@ -39,38 +39,37 @@
 //     }
 // };
 
-
-import nodemailer from "nodemailer";
 import ApiError from "./errorHandler.js";
-
-const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.BREVO_EMAIL,
-        pass: process.env.BREVO_SMTP_KEY,
-    }
-});
 
 export const sendEmail = async (options) => {
     if (!options || !options.to) {
         throw new ApiError(400, "Recipient email is missing");
     }
     try {
-        const info = await transporter.sendMail({
-            from: `"MiniShop" <${process.env.BREVO_EMAIL}>`,
-            to: options.to,
-            subject: options.subject || "MiniShop Notification",
-            text: options.text || "",
-            html: options.html || null
+        const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "api-key": process.env.BREVO_API_KEY,
+            },
+            body: JSON.stringify({
+                sender: { name: "MiniShop", email: process.env.BREVO_EMAIL },
+                to: [{ email: options.to }],
+                subject: options.subject || "MiniShop Notification",
+                textContent: options.text || "",
+                htmlContent: options.html || undefined
+            })
         });
 
-        console.log("✅ Email sent:", info.messageId);
-        return {
-            success: true,
-            message: "Email Sent"
-        };
+        if (!response.ok) {
+            const err = await response.json();
+            console.log("❌ Email error:", err.message);
+            throw new ApiError(500, "Failed to send email");
+        }
+
+        console.log("✅ Email sent successfully");
+        return { success: true, message: "Email Sent" };
+
     } catch (err) {
         console.log("❌ Email error:", err.message);
         throw new ApiError(500, "Failed to send email");
