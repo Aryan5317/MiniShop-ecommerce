@@ -39,30 +39,34 @@
 //     }
 // };
 
-import { Resend } from "resend";
+
+import nodemailer from "nodemailer";
 import ApiError from "./errorHandler.js";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.BREVO_EMAIL,
+        pass: process.env.BREVO_SMTP_KEY,
+    }
+});
 
 export const sendEmail = async (options) => {
     if (!options || !options.to) {
         throw new ApiError(400, "Recipient email is missing");
     }
     try {
-        const { data, error } = await resend.emails.send({
-            from: "MiniShop <onboarding@resend.dev>",
+        const info = await transporter.sendMail({
+            from: `"MiniShop" <${process.env.BREVO_EMAIL}>`,
             to: options.to,
             subject: options.subject || "MiniShop Notification",
             text: options.text || "",
             html: options.html || null
         });
 
-        if (error) {
-            console.log("❌ Email error:", error.message);
-            throw new ApiError(500, "Failed to send email");
-        }
-
-        console.log("✅ Email sent:", data.id);
+        console.log("✅ Email sent:", info.messageId);
         return {
             success: true,
             message: "Email Sent"
