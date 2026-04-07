@@ -19,7 +19,10 @@ async function verifyEmailService(email) {
             console.log("Email verification failed: ", data.message || data)
             throw new Error(data.message || "Verification failed")
         }
-        return data.message
+        return {
+            message: data.message,
+            otpToken: data.data.otpToken  
+        }
     }
     catch (err) {
         console.log("Error is: ", err)

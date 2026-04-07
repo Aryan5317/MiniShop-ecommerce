@@ -80,6 +80,7 @@ function RegisterPage() {
     else {
       console.log("Error is: ", validationErrors)
       setFormMessage(false)
+      setLoading(false)
     }
   }
 

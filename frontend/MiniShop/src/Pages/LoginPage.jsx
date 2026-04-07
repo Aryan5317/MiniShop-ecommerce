@@ -74,6 +74,7 @@ function LoginPage() {
     else {
       console.log("Error is", loginValidationError)
       setFormMessage(false)
+      setLoading(false)
     }
   }
 

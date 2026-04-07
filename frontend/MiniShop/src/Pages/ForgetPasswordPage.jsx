@@ -7,6 +7,7 @@ function ForgetPasswordPage() {
   const [forgetDetails, setForgetDetails] = useState({
     email: "",
     otp: "",
+    otpToken: "",
   })
   const [verifyEmail, setVerifyEmail] = useState(false)
   const [error, setError] = useState({})
@@ -29,19 +30,23 @@ function ForgetPasswordPage() {
       [name]: value
     }))
   }
+
   const verifyEmailDetails = async () => {
     const isEmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(forgetDetails.email);
     if (!isEmail) {
-      const emailError = "*Enter valid email id ends with @gmail.com"
       setError((prev) => ({
         ...prev,
-        email: emailError
+        email: "*Enter valid email id ends with @gmail.com"
       }))
     }
     else {
       try {
         const emailVerification = await verifyEmailService(forgetDetails.email)
         console.log("Data recived from backend is: ", emailVerification)
+        setForgetDetails((prev) => ({   // <-- store otpToken
+          ...prev,
+          otpToken: emailVerification.otpToken
+        }))
         setVerifyEmail(true)
       }
       catch (err) {
@@ -55,44 +60,86 @@ function ForgetPasswordPage() {
     }
   }
 
+  // const verifyOtpDetails = async () => {
+  //   setLoading(true)
+  //   console.log("Otp is: ", forgetDetails.otp)
+  //   if (!forgetDetails.otp) {
+  //     setError((prev) => ({
+  //       ...prev,
+  //       otp: "*Otp field can not be empty"
+  //     }))
+  //   }
+  //   else if (forgetDetails.otp.length != 6) {
+  //     setError((prev) => ({
+  //       ...prev,
+  //       otp: "*Enter correct Otp"
+  //     }))
+  //   }
+  //   else {
+  //     console.log("Otp matched successfully")
+  //     try {
+  //       const otpVerification = await verifyOtpService(forgetDetails)
+  //       console.log("Otp verification message is: ", otpVerification)
+  //       SetotpVerificationMessage(true)
+  //       setTimeout(() => {
+  //         navigate("/reset-password")
+  //       }, 2000)
+  //     }
+  //     catch (err) {
+  //       console.log("Err is: ", err)
+  //       setError((prev) => ({
+  //         ...prev,
+  //         message: err.message
+  //       }))
+  //       SetotpVerificationMessage(false)
+  //     }
+  //     finally {
+  //       setLoading(false)
+  //     }
+  //   }
+  // }
   const verifyOtpDetails = async () => {
     setLoading(true)
     console.log("Otp is: ", forgetDetails.otp)
     if (!forgetDetails.otp) {
-      setError((prev) => ({
-        ...prev,
-        otp: "*Otp field can not be empty"
-      }))
+        setError((prev) => ({
+            ...prev,
+            otp: "*Otp field can not be empty"
+        }))
+        setLoading(false)
     }
     else if (forgetDetails.otp.length != 6) {
-      setError((prev) => ({
-        ...prev,
-        otp: "*Enter correct Otp"
-      }))
+        setError((prev) => ({
+            ...prev,
+            otp: "*Enter correct Otp"
+        }))
+        setLoading(false)
     }
     else {
-      console.log("Otp matched successfully")
-      try {
-        const otpVerification = await verifyOtpService(forgetDetails)
-        console.log("Otp verification message is: ", otpVerification)
-        SetotpVerificationMessage(true)
-        setTimeout(() => {
-          navigate("/reset-password")
-        }, 2000)
-      }
-      catch (err) {
-        console.log("Err is: ", err)
-        setError((prev) => ({
-          ...prev,
-          message: err.message
-        }))
-        SetotpVerificationMessage(false)
-      }
-      finally {
-        setLoading(false)
-      }
+        console.log("Otp matched successfully")
+        try {
+            const otpVerification = await verifyOtpService(forgetDetails)
+            console.log("Otp verification message is: ", otpVerification)
+            sessionStorage.setItem("otpToken", forgetDetails.otpToken)  // <-- store
+            sessionStorage.setItem("resetEmail", forgetDetails.email)   // <-- store email too
+            SetotpVerificationMessage(true)
+            setTimeout(() => {
+                navigate("/reset-password")
+            }, 2000)
+        }
+        catch (err) {
+            console.log("Err is: ", err)
+            setError((prev) => ({
+                ...prev,
+                message: err.message
+            }))
+            SetotpVerificationMessage(false)
+        }
+        finally {
+            setLoading(false)
+        }
     }
-  }
+}
   return (
     <div>
       <div className="hidden sm:flex relative w-full h-screen items-center justify-center overflow-hidden">

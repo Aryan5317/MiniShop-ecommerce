@@ -26,27 +26,33 @@ function Navbar() {
         }
     }
     useEffect(() => {
-        if (isLoggedIn) {
-            const location = async () => {
+    if (isLoggedIn) {
+        const location = async () => {
+            try {
                 const response = await locationService()
                 console.log("Response get from locations is: ", response.data)
-                if (!response) {
-                    console.log("False")
-                    setLocationFlag(false)
-                }
-                else {
+                if (response && response.data && response.data.location && response.data.location.length > 0) {
+                    let found = false
                     for (let i = 0; i < response.data.location.length; i++) {
                         if (response.data.location[i]._id === response.data.defaultLocation) {
-                            setActiceLocation(response.data?.location?.[i]?.pincode)
+                            setActiceLocation(response.data.location[i].pincode)
+                            found = true
                         }
                     }
-                    console.log("True")
-                    setLocationFlag(true)
+                    setLocationFlag(found)
+                } else {
+                    setLocationFlag(false)
                 }
+            } catch (err) {
+                console.log("Location fetch error:", err)
+                setLocationFlag(false)
             }
-            location()
         }
-    }, [])
+        location()
+    } else {
+        setLocationFlag(false)
+    }
+}, [isLoggedIn])  
 
 
     const homePage = () => {

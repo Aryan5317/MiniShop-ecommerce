@@ -69,6 +69,7 @@ function ResetPasswordPage() {
     else {
       console.log("Errros is: ", validationError)
       setFormMessage(false)
+      setLoading(false)
     }
   }
 

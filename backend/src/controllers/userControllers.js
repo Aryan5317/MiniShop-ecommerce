@@ -91,7 +91,7 @@ Team MiniShop`
             console.log("Email failed:", err);
         });
 
-    
+
     const userCreated = await User.findById(newUser._id)
         .select("-password")
     if (!userCreated) {
@@ -218,21 +218,20 @@ MiniShop Team`
 })
 
 const verifyOtp = asyncHandler(async (req, res, next) => {
-    const { email, otp } = req.body
-    const otpTokenCookies = req.cookies.otpToken
+    const { email, otp, otpToken } = req.body  // <-- add otpToken from body
+    const otpTokenCookies = req.cookies.otpToken || otpToken  // <-- fallback to body
     console.log("otp Token from cookie is: ", otpTokenCookies)
     console.log("Email for otp is: ", email)
     console.log("Otp is: ", otp)
 
-    const findUser = await User.findOne({
-        email: email
-    })
+    const findUser = await User.findOne({ email: email })
 
     if (!findUser) {
         throw new ApiError(404, "*User not exist signin first")
     }
     console.log("User find updated is: ", findUser)
-    const savedOtpToken = await findUser.otpToken
+
+    const savedOtpToken = findUser.otpToken
     if (!(savedOtpToken === otpTokenCookies)) {
         throw new ApiError(500, "Invalid User")
     }
@@ -244,9 +243,8 @@ const verifyOtp = asyncHandler(async (req, res, next) => {
 })
 
 const resetPassword = asyncHandler(async (req, res, next) => {
-    const { newPassword, confirmPassword } = req.body;
-    const otpTokenCookies = req.cookies.otpToken
-    console.log("Otp token in reset password is: ", otpTokenCookies)
+    const { newPassword, confirmPassword, otpToken } = req.body
+    console.log("Otp token in reset password is: ", otpToken)
     console.log("New Password is: ", newPassword)
     console.log("Confirm Password is: ", confirmPassword)
 
@@ -273,19 +271,21 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     if (!(newPassword === confirmPassword)) {
         throw new ApiError(404, "*New Password and Confirm Password does not match")
     }
-
-    const findUser = await User.findOne({ otpToken: otpTokenCookies })
+    const findUser = await User.findOne({ otpToken: otpToken })
     console.log("Find User is: ", findUser)
+    if (!findUser) {
+        throw new ApiError(404, "Invalid or expired OTP token")
+    }
 
-    const userId = await findUser._id;
+    const userId = findUser._id
 
-    findUser.password = newPassword;
+    findUser.password = newPassword
+    findUser.otpToken = null
     await findUser.save()
 
     const getUserDetails = await User.findById(userId)
         .select("-password -otp -otpToken -refreshToken -accessToken")
     console.log("User details after updating password is: ", getUserDetails)
-
 
     return res.status(200)
         .json(new ApiResponse(200, {

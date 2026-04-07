@@ -2,7 +2,8 @@ async function verifyOtpService(forgetDetails) {
     console.log("Otp recived for verification is: ", forgetDetails)
     const dataToSend = {
         email: forgetDetails.email,
-        otp: forgetDetails.otp
+        otp: forgetDetails.otp,
+        otpToken: forgetDetails.otpToken  // <-- add this
     }
     console.log("Data to send is: ", dataToSend)
     try {
@@ -18,8 +19,8 @@ async function verifyOtpService(forgetDetails) {
             }
         )
         const data = await response.json()
-        console.log("Data is: ",data)
-        if(!response.ok){
+        console.log("Data is: ", data)
+        if (!response.ok) {
             console.log("Authentication failed: ", data.method || data)
             throw new Error(data.message || "Authentication Failed")
         }
