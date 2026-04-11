@@ -10,7 +10,7 @@ import ExploreEarPhoneProduct from "../components/component2/ExploreEarPhoneProd
 import ExploreWatchProduct from "../components/component2/ExploreWatchProduct"
 import ExploreShoesProducts from "../components/component2/ExploreShoesProducts"
 function HomePage() {
-  console.log("Home Page Rendered");
+  
   return (
     <div>
       <Navbar />

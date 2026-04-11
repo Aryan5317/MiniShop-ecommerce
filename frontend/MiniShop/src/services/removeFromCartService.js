@@ -1,11 +1,11 @@
 const removeFromCartService = async (id, flag) => {
     console.log("ID is: ", id)
-    console.log("Flag for removing from cart: ", flag);
+    
     const dataToSend = {
         ID: id,
         flag: flag,
     }
-    console.log("Data to send for cart remove is: ", dataToSend);
+    
     try {
         const response = await fetch(
             "https://minishop-ecommerce-o1yl.onrender.com/api/users/cartDetails/remove-cartPorduct", {
@@ -17,9 +17,9 @@ const removeFromCartService = async (id, flag) => {
                 "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}` // ✅ added
             }
         })
-        console.log("Response is: ", response);
+        
         const data = await response.json();
-        console.log("Data after removing cart is: ", data);
+        
         if (!response.ok) {
             console.log("Error from backend while removing cart product is:  ", data.message || data)
             throw new Error(data.message || data);

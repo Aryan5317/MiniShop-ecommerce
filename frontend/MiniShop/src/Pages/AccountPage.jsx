@@ -16,7 +16,7 @@ function AccountPage() {
   }
   const logoutUser = async () => {
     if (isLoggedIn) {
-      console.log("Log out button is clicked");
+      
       try {
         const resposneData = await logOutService()
         console.log("Response is: ", resposneData)

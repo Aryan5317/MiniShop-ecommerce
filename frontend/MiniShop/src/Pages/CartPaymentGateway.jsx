@@ -89,7 +89,7 @@ function CartPaymentGateway() {
             orderDetails();
         }
         else {
-            console.log("key is incorrect");
+            
             setPassKeyMessage("Payment key doesn't matched. Enter correct payment key")
             setUserpaymentKey("")
         }

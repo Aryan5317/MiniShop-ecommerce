@@ -17,7 +17,7 @@ function OrderPage() {
     if (isLoggedIn) {
       const orders = async () => {
         const response = await getOrderScuccessService();
-        console.log("Response: ", response.data?.order?.orders);
+        
 
         const fetchedOrders = response?.data?.order?.orders || []
         if (fetchedOrders.length === 0) {

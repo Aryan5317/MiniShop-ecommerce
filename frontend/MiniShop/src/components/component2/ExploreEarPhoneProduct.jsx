@@ -24,7 +24,7 @@ function ExploreEarPhoneProduct() {
                 }
             }
 
-            console.log("Sorted EarPhones details: ", productDetails.data.productData);
+            
             setProductData(productDetails.data.productData);
         }
         products();

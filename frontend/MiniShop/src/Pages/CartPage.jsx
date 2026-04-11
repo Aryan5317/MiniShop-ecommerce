@@ -22,8 +22,6 @@ function CartPage() {
   const [buyClicked, setBuyClicked] = useState(false)
   const { isLoggedIn } = useContext(propContext)
 
-
-
   const removeCartProduct = (productId) => {
     const cart = async () => {
       const response = await removeFromCartService(productId, false);
@@ -38,7 +36,7 @@ function CartPage() {
   useEffect(() => {
     const cart = async () => {
       const response = await allCartProductsService()
-      console.log("Response is: ", response);
+      
       if (response) {
         console.log("Response data from cart is: ", response.data.cartDetails.orders)
         setCartProduct(response.data.cartDetails.orders)

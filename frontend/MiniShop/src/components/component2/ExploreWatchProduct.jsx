@@ -24,7 +24,7 @@ function ExploreWatchProduct() {
                 }
             }
 
-            console.log("Sorted Watch details: ", productDetails.data.productData);
+            
             setProductData(productDetails.data.productData);
         }
         products();

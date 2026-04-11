@@ -1,5 +1,5 @@
 const addToCartService = async (id, category, flag) => {
-    console.log("Id recived is: ", id, flag);
+    
     const dataToSend = {
         productId: id,
         category: category,
@@ -18,7 +18,7 @@ const addToCartService = async (id, category, flag) => {
             body: JSON.stringify(dataToSend),
         });
         const data = await response.json()
-        console.log("Data is: ", data);
+        
         if (!response.ok) {
             console.log("Add to cart details: ", data.message || data)
             throw new Error(data.message);

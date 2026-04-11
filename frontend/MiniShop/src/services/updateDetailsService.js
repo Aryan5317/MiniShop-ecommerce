@@ -6,7 +6,7 @@ const updateDetailsService = async (details) => {
     if(details.newPassword) dataToSend.newPassword = details.newPassword
     if(details.confirmPassword) dataToSend.confirmPassword = details.confirmPassword
 
-    console.log("Data to send: ", dataToSend);
+    
     try {
         const response = await fetch(
             "https://minishop-ecommerce-o1yl.onrender.com/api/users/update-details",

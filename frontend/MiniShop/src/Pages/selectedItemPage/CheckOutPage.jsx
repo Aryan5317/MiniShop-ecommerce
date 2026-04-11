@@ -71,12 +71,12 @@ function CheckOutPage() {
     }, [])
 
     const cancelOrder = () => {
-        console.log("Navigating back");
+        
         navigate(-1);
     }
 
     const orderPlaced = () => {
-        console.log("Payment page opened");
+        
         setTimeout(() => {
             navigate(`/product/${productId}/orderSummary/payment-gateway?quantity=${productQuantity}&category=${Category}`)
         }, 3000)

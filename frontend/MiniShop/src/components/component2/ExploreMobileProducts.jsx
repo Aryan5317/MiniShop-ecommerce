@@ -21,7 +21,7 @@ function ExploreMobileProducts() {
                     }
                 }
             }
-            console.log("New Product details is: ", productDetails.data.productData);
+            
             setProductData(productDetails.data.productData);
         }
         products();

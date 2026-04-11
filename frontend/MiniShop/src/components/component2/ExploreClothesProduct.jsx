@@ -24,7 +24,7 @@ function ExploreClothesProduct() {
                 }
             }
 
-            console.log("Sorted Clothes details: ", productDetails.data.productData);
+            
             setProductData(productDetails.data.productData);
         }
         products();

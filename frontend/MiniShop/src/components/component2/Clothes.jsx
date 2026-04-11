@@ -83,13 +83,13 @@ function Clothes({ filterValue }) {
         const cartCall = async () => {
             e.preventDefault()
             e.stopPropagation()
-            console.log("ID in clothes is: ", id);
+            
             console.log("Category is: ", c)
             const responseCart = await addToCartService(id, c, true)
-            console.log("Response Cart is: ", responseCart);
+            
             if (responseCart) {
                 setCartMessage(responseCart);
-                console.log("Items added to the cart");
+                
                 setPopup(true)
                 setTimeout(() => {
                     setPopup(false)

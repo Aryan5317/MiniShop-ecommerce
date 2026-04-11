@@ -5,7 +5,7 @@ const orderCompletionService = async (category, id) => {
         category: category,
         productId: id,
     }
-    console.log("Data to Send: ", dataToSend);
+    
     try {
         const response = await fetch(
             "https://minishop-ecommerce-o1yl.onrender.com/api/users/cartDetails/cart-completed", {

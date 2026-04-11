@@ -74,7 +74,7 @@ function Navbar() {
         navigate("/order")
     }
     const logoutUser = async () => {
-        console.log("Log out button is clicked");
+        
         try {
             const resposneData = await logOutService()
             console.log("Response is: ", resposneData)

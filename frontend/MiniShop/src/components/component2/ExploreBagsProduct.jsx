@@ -24,7 +24,7 @@ function ExploreBagsProducts() {
                 }
             }
 
-            console.log("Sorted Bag details: ", productDetails.data.productData);
+            
             setProductData(productDetails.data.productData);
         }
         products();

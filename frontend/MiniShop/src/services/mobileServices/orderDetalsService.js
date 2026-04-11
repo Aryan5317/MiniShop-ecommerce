@@ -8,7 +8,7 @@ const orderDetalsService = async (category, productId, productQuantity, totalAmo
         quantity: productQuantity,
         totalAmount: totalAmount
     }
-    console.log("Data to Send: ", dataToSend);
+    
     try {
         const response = await fetch(
             "https://minishop-ecommerce-o1yl.onrender.com/api/users/orderDetails/order-summary", {

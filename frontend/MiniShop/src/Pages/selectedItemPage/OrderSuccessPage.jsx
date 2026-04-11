@@ -14,11 +14,11 @@ function OrderSuccessPage() {
   useEffect(() => {
     const getOrderDetails = async () => {
       const response = await getOrderScuccessService()
-      console.log("Response: ", response);
+      
       if (response) {
         console.log("Data fetched and stored is: ", response.data.order.orders)
         const userTotalOrder = response.data.order.orders.length;
-        console.log("Order is: ", response.data.order.orders[userTotalOrder - 1]);
+        
         const order = response.data.order.orders[userTotalOrder - 1];
         setUserOrder(order);
       }
